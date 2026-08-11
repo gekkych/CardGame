@@ -1,0 +1,4 @@
+namespace BattleEngine.Work.Event
+{
+    public abstract record BaseEvent;
+}
