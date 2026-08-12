@@ -14,6 +14,9 @@ namespace BattleEngine.Work.Step.Resolver
 
                 DeathStep deathStep =>
                     new DeathStepResolver().Resolve(deathStep, state),
+                
+                BonusChangeStep bonusChangeStep =>
+                    new BonusChangeStepResolver().Resolve(bonusChangeStep, state),
 
                 _ => new List<BaseEvent>()
             };

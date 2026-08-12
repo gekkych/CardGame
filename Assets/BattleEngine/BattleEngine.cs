@@ -32,8 +32,10 @@ namespace BattleEngine
             _reactions = new();
            var rs1 = new DeathRSystem();
            var rs2 = new ThornRSystem();
+           var rs3 = new RageOnDamageRSystem();
            _reactions.Add(rs1);
            _reactions.Add(rs2);
+           _reactions.Add(rs3);
            _reactions.Sort((x, y) => x.Priority.CompareTo(y.Priority));
         
         }

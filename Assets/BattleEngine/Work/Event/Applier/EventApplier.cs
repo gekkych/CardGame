@@ -13,6 +13,11 @@ namespace BattleEngine.Work.Event.Applier
                 case DeathEvent dee:
                     state.Board.Remove(dee.To);
                     break;
+                
+                case BonusChangeEvent bce:
+                    state.GetUnit(bce.Id).State.
+                        ChangeBonus(bce.Bonus, bce.Delta);
+                    break;
             }
         }
     }

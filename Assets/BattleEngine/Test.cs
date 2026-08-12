@@ -32,13 +32,15 @@ namespace BattleEngine
         }
 
         [Test]
-        public void ThornTest()
+        public void RageOnDamage()
         {
-            BattleState initialState = new BattleState();
+            BattleState initialState =  new BattleState();
             initialState.Board.Good = UnitLibrary.Warrior();
             initialState.Board.Bad = UnitLibrary.Slime();
-            initialState.Board.Bad.Comps.Add(new ThornComp(3));
 
+            initialState.Board.Bad.State.CurrHp = 30;
+            initialState.Board.Good.AddComp(new RageOnDamageComp(2, 3));
+            initialState.Board.Bad.AddComp(new ThornComp(3));
             BattleEngine engine = new BattleEngine();
             engine.TestInit(initialState);
 
@@ -51,31 +53,7 @@ namespace BattleEngine
             {
                 TestContext.WriteLine(EventMessage.ToString(e));
             }
-
-        }
-        
-        [Test]
-        public void ThornAttackerDeathTest()
-        {
-            BattleState initialState = new BattleState();
-            initialState.Board.Good = UnitLibrary.Warrior();
-            initialState.Board.Bad = UnitLibrary.Slime();
-            initialState.Board.Bad.Comps.Add(new ThornComp(3));
-            initialState.Board.Good.State.CurrHp = 2;
-
-            BattleEngine engine = new BattleEngine();
-            engine.TestInit(initialState);
-
-            var events = engine.Battle(new AttackContext(
-                initialState.Board.Good.UnitId,
-                initialState.Board.Bad.UnitId,
-                AttackLibrary.DoubleSlash));
-
-            foreach (var e in events)
-            {
-                TestContext.WriteLine(EventMessage.ToString(e));
-            }
-
+            
         }
     }
 }

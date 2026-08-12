@@ -13,7 +13,10 @@ namespace BattleEngine.Unit
         
         public static BaseUnit Slime()
         {
-            var stats = new UnitStats(UnitType.Slime, 15);
+            var stats = new UnitStats(
+                UnitType.Slime,
+                15,
+                0);
             var state = UnitState.FromStats(stats);
             int id = _counter++;
             
@@ -22,7 +25,10 @@ namespace BattleEngine.Unit
         
         public static BaseUnit Warrior()
         {
-            var stats = new UnitStats(UnitType.Warrior, 60);
+            var stats = new UnitStats(
+                UnitType.Warrior,
+                60,
+                0);
             var state = UnitState.FromStats(stats);
             int id = _counter++;
             

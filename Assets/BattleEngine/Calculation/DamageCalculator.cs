@@ -7,8 +7,12 @@ namespace BattleEngine.Calculation
     {
         public int Calc(DamageStep step, BattleState state)
         {
-            int targetHp = state.GetUnit(step.To).State.CurrHp;
-            return step.Amount > targetHp ? targetHp : step.Amount;
+            int damage = step.Amount;
+            var target = state.GetUnit(step.To);
+            var attacker = state.GetUnit(step.From);
+            damage += attacker.State.StrengthBonus;
+            int targetHp = target.State.CurrHp;
+            return step.Amount > targetHp ? targetHp : damage;
         }
     }
 }

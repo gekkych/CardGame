@@ -1,4 +1,4 @@
 namespace BattleEngine.Work.Step
 {
-    public abstract record BaseStep();
+    public abstract record BaseStep;
 }

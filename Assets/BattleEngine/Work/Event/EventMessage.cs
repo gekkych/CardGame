@@ -1,5 +1,3 @@
-using System.Data;
-
 namespace BattleEngine.Work.Event
 {
     public static class EventMessage
@@ -13,6 +11,9 @@ namespace BattleEngine.Work.Event
                
                 DeathEvent dee =>
                     $"{dee.ToName} {dee.To} died",
+                
+                BonusChangeEvent bce =>
+                    $"{bce.Name} {bce.Id} bonus {bce.Bonus.ToString()} changes for {bce.Delta}",
                 
                 _ =>
                     "Log Error"
