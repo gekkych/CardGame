@@ -3,6 +3,7 @@ using System.Linq;
 using BattleEngine.Command;
 using BattleEngine.Command.Resolver;
 using BattleEngine.Reaction;
+using BattleEngine.Unit;
 using BattleEngine.Work;
 using BattleEngine.Work.Event;
 using BattleEngine.Work.Event.Applier;
@@ -18,6 +19,12 @@ namespace BattleEngine
         private List<BaseEvent> _buff = new();
         private BattleState _state = new();
         private List<BaseReaction> _reactions = new();
+
+        public BattleEngine()
+        {
+            UnitLibrary.ResetCounter();
+        }
+        
         public void TestInit(BattleState initialState)
         {
             _state = initialState;

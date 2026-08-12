@@ -1,6 +1,6 @@
 namespace BattleEngine.Unit.Component
 {
-    public enum Comps
+    public enum ComponentName
     {
         Thorn
     }

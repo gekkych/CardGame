@@ -37,7 +37,7 @@ namespace BattleEngine
             BattleState initialState = new BattleState();
             initialState.Board.Good = UnitLibrary.Warrior();
             initialState.Board.Bad = UnitLibrary.Slime();
-            initialState.Board.Bad.Comps.Add(Comps.Thorn);
+            initialState.Board.Bad.Comps.Add(new ThornComp(3));
 
             BattleEngine engine = new BattleEngine();
             engine.TestInit(initialState);
@@ -60,7 +60,7 @@ namespace BattleEngine
             BattleState initialState = new BattleState();
             initialState.Board.Good = UnitLibrary.Warrior();
             initialState.Board.Bad = UnitLibrary.Slime();
-            initialState.Board.Bad.Comps.Add(Comps.Thorn);
+            initialState.Board.Bad.Comps.Add(new ThornComp(3));
             initialState.Board.Good.State.CurrHp = 2;
 
             BattleEngine engine = new BattleEngine();

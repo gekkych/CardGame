@@ -5,6 +5,12 @@ namespace BattleEngine.Unit
     public static class UnitLibrary
     {
         private static int _counter = 0;
+
+        public static void ResetCounter()
+        {
+            _counter = 0;
+        }
+        
         public static BaseUnit Slime()
         {
             var stats = new UnitStats(UnitType.Slime, 15);

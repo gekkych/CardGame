@@ -9,18 +9,22 @@ namespace BattleEngine.Unit
         public UnitStats  Stats { get; set; }
         public UnitState State { get; set; }
 
-        public List<Comps> Comps = new();
+        public List<BaseComponent> Comps = new();
 
-        public BaseUnit(int Id, UnitStats Stats, UnitState State)
+        public BaseUnit(int id, UnitStats stats, UnitState state)
         {
-            this.UnitId = Id;
-            this.Stats = Stats;
-            this.State = State;
+            this.UnitId = id;
+            this.Stats = stats;
+            this.State = state;
         }
 
-        public bool HasComp(Comps comp)
+        public bool HasComp<TComp>() where TComp : BaseComponent
         {
-            return Comps.Contains(comp);
+            foreach (BaseComponent comp in Comps)
+            {
+                if (comp is TComp) { return true; }
+            }
+            return false;
         }
 
         public bool IsDead()
