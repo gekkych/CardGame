@@ -12,7 +12,7 @@ namespace BattleEngine.Calculation
             var attacker = state.GetUnit(step.From);
             damage += attacker.State.StrengthBonus;
             int targetHp = target.State.CurrHp;
-            return step.Amount > targetHp ? targetHp : damage;
+            return damage > targetHp ? targetHp : damage;
         }
     }
 }
