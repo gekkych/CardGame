@@ -5,9 +5,9 @@ namespace BattleEngine.Work.Step.Resolver
 {
     public class DeathStepResolver : IStepResolver<DeathStep>
     {
-        public List<BaseEvent> Resolve(DeathStep step, BattleState state)
+        public List<IExecutable> Resolve(DeathStep step, BattleState state)
         {
-            List<BaseEvent> events = new();
+            List<IExecutable> events = new();
             var unit = state.GetUnit(step.To);
 
             if (unit != null)

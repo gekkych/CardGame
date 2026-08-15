@@ -8,9 +8,9 @@ namespace BattleEngine.Work.Step.Resolver
     public class DamageStepResolver : IStepResolver<DamageStep>
     {
         private DamageCalculator _calculator = new();
-        public List<BaseEvent> Resolve(DamageStep step, BattleState state)
+        public List<IExecutable> Resolve(DamageStep step, BattleState state)
         {
-            var events = new List<BaseEvent>();
+            var events = new List<IExecutable>();
 
             var attacker = state.GetUnit(step.From);
             var target = state.GetUnit(step.To);

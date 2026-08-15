@@ -1,4 +1,4 @@
 namespace BattleEngine.Work.Event
 {
-    public abstract record BaseEvent;
+    public abstract record BaseEvent : IExecutable;
 }

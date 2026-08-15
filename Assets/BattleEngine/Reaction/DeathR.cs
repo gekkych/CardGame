@@ -4,9 +4,9 @@ using BattleEngine.Work.Step;
 
 namespace BattleEngine.Reaction
 {
-    public class DeathRSystem : BaseReaction
+    public class DeathR : BaseReaction
     {
-        public DeathRSystem() => Priority = 1500;
+        public DeathR() => Priority = 1500;
         
         public override List<BaseStep> React(BaseEvent e, BattleState state)
         {

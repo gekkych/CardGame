@@ -20,7 +20,7 @@ namespace BattleEngine
             BattleEngine engine = new BattleEngine();
             engine.TestInit(initialState);
 
-            var events = engine.Battle(new AttackContext(
+            var events = engine.Turn(new AttackContext(
                 initialState.Board.Good.UnitId,
                 initialState.Board.Bad.UnitId,
                 AttackLibrary.DoubleSlash));
@@ -40,14 +40,19 @@ namespace BattleEngine
 
             initialState.Board.Bad.State.CurrHp = 30;
             initialState.Board.Good.AddComp(new RageOnDamageComp(2, 3));
-            initialState.Board.Bad.AddComp(new ThornComp(3));
+            initialState.Board.Bad.AddComp(new ThornComp(1));
             BattleEngine engine = new BattleEngine();
             engine.TestInit(initialState);
-
-            var events = engine.Battle(new AttackContext(
+            var DSA = new AttackContext(
                 initialState.Board.Good.UnitId,
                 initialState.Board.Bad.UnitId,
-                AttackLibrary.DoubleSlash));
+                AttackLibrary.DoubleSlash);
+
+            var turn1 = engine.Turn(DSA);
+            var turn2 = engine.Turn(DSA);
+            turn1.AddRange(turn2);
+
+            var events = turn1;
 
             foreach (var e in events)
             {

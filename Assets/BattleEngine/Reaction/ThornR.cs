@@ -3,14 +3,15 @@ using BattleEngine.Enums;
 using BattleEngine.Unit.Component;
 using BattleEngine.Work.Event;
 using BattleEngine.Work.Step;
+using BattleEngine.Work.Step.ComponentStep;
 
 namespace BattleEngine.Reaction
 {
-    public class ThornRSystem : BaseReaction
+    public class ThornR : BaseReaction
     {
         private Dictionary<int, HashSet<int>> _alreadyhit = new(); 
 
-        public ThornRSystem() => Priority = 1000;
+        public ThornR() => Priority = 1000;
         public override List<BaseStep> React(BaseEvent e, BattleState state)
         {
             List<BaseStep> steps = new();
@@ -24,7 +25,7 @@ namespace BattleEngine.Reaction
                 var to = state.GetUnit(de.Target);
                 if (to == null) return steps;
 
-                if (!to.HasComp<ThornComp>()) return steps;
+                if (!to.HasComp(ComponentName.Thorn)) return steps;
 
                 if (!_alreadyhit.ContainsKey(from.UnitId))
                 {
@@ -43,6 +44,33 @@ namespace BattleEngine.Reaction
                 return steps;
                 
             }
+
+            if (e is EndTurnEvent ete)
+            {
+                var targets = state.GetAllUnits();
+
+                foreach (var target in targets)
+                {
+                    if (target.HasComp(ComponentName.Thorn))
+                    {
+                        var comp = (ThornComp)target.GetComp(ComponentName.Thorn);
+                        if (comp.RemainingTurns > 1)
+                        {
+                            steps.Add(new ReplaceCompStep(
+                                target.UnitId,
+                                ComponentName.Thorn,
+                                comp with{RemainingTurns = comp.RemainingTurns - 1}));
+                        }
+                        else
+                        {
+                            steps.Add(new RemoveCompStep(
+                                target.UnitId,
+                                ComponentName.Thorn));
+                        }
+                    }
+                }
+            }
+            
             return steps;
             
         }

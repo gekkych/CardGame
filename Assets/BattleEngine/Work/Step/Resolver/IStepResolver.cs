@@ -5,7 +5,7 @@ namespace BattleEngine.Work.Step.Resolver
 {
     public interface IStepResolver<TStep> where TStep : BaseStep
     {
-        List<BaseEvent> Resolve(
+        List<IExecutable> Resolve(
             TStep step,
             BattleState state
             );

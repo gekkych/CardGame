@@ -25,9 +25,9 @@ namespace BattleEngine.Unit
             return State.CurrHp <= 0;
         }
 
-        public bool HasComp<TComp>() where TComp : BaseComponent
+        public bool HasComp(ComponentName name)
         {
-            return comps.OfType<TComp>().Any();
+            return comps.Any(c => c.Name == name);
         }
 
         public void AddComp(BaseComponent comp) 
@@ -35,17 +35,17 @@ namespace BattleEngine.Unit
             comps.Add(comp);
         }
         
-        public void RemoveComp<TComp>() where TComp : BaseComponent
+        public void RemoveComp(ComponentName name)
         {
             foreach (var comp in comps.ToList())
             {
-                if (comp is TComp) { comps.Remove(comp); }
+                if (comp.Name == name) { comps.Remove(comp); }
             }
         }
 
-        public TComp GetComp<TComp>() where TComp : BaseComponent
+        public BaseComponent GetComp(ComponentName name)
         {
-            return comps.OfType<TComp>().FirstOrDefault();
+            return comps.FirstOrDefault(c => c.Name == name);
         }
     }
 }

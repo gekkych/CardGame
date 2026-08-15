@@ -30,17 +30,19 @@ namespace BattleEngine
             _state = initialState;
             
             _reactions = new();
-           var rs1 = new DeathRSystem();
-           var rs2 = new ThornRSystem();
-           var rs3 = new RageOnDamageRSystem();
+           var rs1 = new DeathR();
+           var rs2 = new ThornR();
+           var rs3 = new RageOnDamageR();
+           var rs4 = new TestHealR();
            _reactions.Add(rs1);
            _reactions.Add(rs2);
            _reactions.Add(rs3);
+           _reactions.Add(rs4);
            _reactions.Sort((x, y) => x.Priority.CompareTo(y.Priority));
         
         }
 
-        public List<BaseEvent> Battle(CommandContext ctx)
+        public List<BaseEvent> Turn(CommandContext ctx)
         {
             foreach (var react in _reactions)
             {
@@ -61,6 +63,7 @@ namespace BattleEngine
         
         private void Execute(IEnumerable<BaseStep> rootSteps)
         {
+            _work.AddFirst(new EventWork(new EndTurnEvent(_state.Turn + 1), 0, 0));
             foreach (var step in rootSteps.Reverse())
                 _work.AddFirst(new StepWork(step, 0));
 
@@ -94,8 +97,17 @@ namespace BattleEngine
 
             events.Reverse();
             foreach (var e in events)
-                _work.AddFirst(
-                    new EventWork(e, depth + 1, 0));
+            {
+                switch (e)
+                {
+                    case BaseEvent be:
+                        _work.AddFirst(new EventWork(be, depth + 1, 0));
+                        break;
+                    case BaseStep bs:
+                        _work.AddFirst(new StepWork(bs, depth + 1));
+                        break;
+                }
+            }
         }
         private void ProcessEvent(BaseEvent e, int depth, int nextReaction)
         {
