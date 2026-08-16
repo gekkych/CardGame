@@ -4,12 +4,6 @@ namespace BattleEngine.Unit
 {
     public static class UnitLibrary
     {
-        private static int _counter = 0;
-
-        public static void ResetCounter()
-        {
-            _counter = 0;
-        }
         
         public static BaseUnit Slime()
         {
@@ -18,9 +12,8 @@ namespace BattleEngine.Unit
                 15,
                 0);
             var state = UnitState.FromStats(stats);
-            int id = _counter++;
             
-            return new BaseUnit(id, stats, state);
+            return new BaseUnit(UnitIdGenerator.Get(), stats, state);
         }
         
         public static BaseUnit Warrior()
@@ -30,9 +23,8 @@ namespace BattleEngine.Unit
                 60,
                 0);
             var state = UnitState.FromStats(stats);
-            int id = _counter++;
             
-            return new BaseUnit(id, stats, state);
+            return new BaseUnit(UnitIdGenerator.Get(), stats, state);
         }
         
     }

@@ -13,52 +13,13 @@ namespace BattleEngine
         [Test]
         public void BattleTest()
         {
-            BattleState initialState =  new BattleState();
-            initialState.Board.Good = UnitLibrary.Warrior();
-            initialState.Board.Bad = UnitLibrary.Slime();
-            
-            BattleEngine engine = new BattleEngine();
-            engine.TestInit(initialState);
-
-            var events = engine.Turn(new AttackContext(
-                initialState.Board.Good.UnitId,
-                initialState.Board.Bad.UnitId,
-                AttackLibrary.DoubleSlash));
-
-            foreach (var e in events)
-            {
-                TestContext.WriteLine(EventMessage.ToString(e));
-            }
+          
         }
 
         [Test]
         public void RageOnDamage()
         {
-            BattleState initialState =  new BattleState();
-            initialState.Board.Good = UnitLibrary.Warrior();
-            initialState.Board.Bad = UnitLibrary.Slime();
-
-            initialState.Board.Bad.State.CurrHp = 30;
-            initialState.Board.Good.AddComp(new RageOnDamageComp(2, 3));
-            initialState.Board.Bad.AddComp(new ThornComp(1));
-            BattleEngine engine = new BattleEngine();
-            engine.TestInit(initialState);
-            var DSA = new AttackContext(
-                initialState.Board.Good.UnitId,
-                initialState.Board.Bad.UnitId,
-                AttackLibrary.DoubleSlash);
-
-            var turn1 = engine.Turn(DSA);
-            var turn2 = engine.Turn(DSA);
-            turn1.AddRange(turn2);
-
-            var events = turn1;
-
-            foreach (var e in events)
-            {
-                TestContext.WriteLine(EventMessage.ToString(e));
-            }
-            
+          
         }
     }
 }

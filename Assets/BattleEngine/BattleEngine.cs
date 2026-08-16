@@ -17,12 +17,13 @@ namespace BattleEngine
         private LinkedList<WorkItem> _work = new();
         private List<BaseEvent> _history = new();
         private List<BaseEvent> _buff = new();
-        private BattleState _state = new();
+        private BattleState _state;
         private List<BaseReaction> _reactions = new();
 
-        public BattleEngine()
+        public BattleEngine(int width, int height)
         {
-            UnitLibrary.ResetCounter();
+            UnitIdGenerator.Reset();
+            _state = new BattleState(width, height);
         }
         
         public void TestInit(BattleState initialState)
@@ -31,13 +32,7 @@ namespace BattleEngine
             
             _reactions = new();
            var rs1 = new DeathR();
-           var rs2 = new ThornR();
-           var rs3 = new RageOnDamageR();
-           var rs4 = new TestHealR();
            _reactions.Add(rs1);
-           _reactions.Add(rs2);
-           _reactions.Add(rs3);
-           _reactions.Add(rs4);
            _reactions.Sort((x, y) => x.Priority.CompareTo(y.Priority));
         
         }

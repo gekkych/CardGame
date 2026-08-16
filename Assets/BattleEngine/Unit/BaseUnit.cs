@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using BattleEngine.Enums;
 using BattleEngine.Unit.Component;
 
 namespace BattleEngine.Unit
@@ -12,6 +13,13 @@ namespace BattleEngine.Unit
 
         public List<BaseComponent> comps = new();
 
+        public BaseUnit(UnitStats stats)
+        {
+            UnitId = UnitIdGenerator.Get();
+            Stats = stats;
+            State = UnitState.FromStats(stats);
+        }
+        
         public BaseUnit(int id, UnitStats stats, UnitState state)
         {
             this.UnitId = id;

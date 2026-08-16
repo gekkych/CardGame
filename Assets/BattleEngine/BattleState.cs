@@ -14,31 +14,27 @@ namespace BattleEngine
         
         public int Turn { get; set; }
 
-        public BattleState()
+        public BattleState(int width, int height)
         {
             Player = null;
             Opponent = null;
-            Board = new Board();
+            Board = new Board(width, height);
             Turn = 1;
         }
 
         public BaseUnit GetUnit(int unitId)
         {
-            if (unitId == -1) return null;
-            
-            if (Board.Good != null && Board.Good.UnitId == unitId) return Board.Good;
-            if (Board.Bad != null && Board.Bad.UnitId == unitId) return Board.Bad;
-            return null;
+            return Board.GetUnit(unitId);
+        }
+
+        public BaseUnit GetUnitAt(Position pos)
+        {
+            return Board.GetUnitAt(pos);
         }
 
         public List<BaseUnit> GetAllUnits()
         {
-            var units = new List<BaseUnit>
-            {
-                Board.Good,
-                Board.Bad
-            };
-            return units.Where(u => u != null).ToList();
+            return Board.GetAllUnits();
         }
     }
 }

@@ -1,6 +1,4 @@
-using System;
-
-namespace BattleEngine.Unit.Component
+namespace BattleEngine.Enums
 {
     public enum ComponentName
     {

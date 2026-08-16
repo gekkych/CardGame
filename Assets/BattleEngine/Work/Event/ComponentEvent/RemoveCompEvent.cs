@@ -1,3 +1,4 @@
+using BattleEngine.Enums;
 using BattleEngine.Unit.Component;
 
 namespace BattleEngine.Work.Event.ComponentEvent

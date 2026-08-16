@@ -3,6 +3,7 @@ namespace BattleEngine.Enums
     public enum UnitType
     {
         Slime,
-        Warrior
+        Warrior,
+        Healer
     }
 }
