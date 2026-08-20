@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using BattleEngine.Work.Event;
 using BattleEngine.Work.Step;
+using BattleEngine.Work.Step.Target;
+using BattleEngine.Work.Step.UnitStateStep;
 
 namespace BattleEngine.Reaction
 {
@@ -17,7 +19,7 @@ namespace BattleEngine.Reaction
                 var unit = state.GetUnit(de.Target);
                 if (unit != null && unit.IsDead())
                 {
-                    reactions.Add(new DeathStep(de.Target));
+                    reactions.Add(new DeathStep(new IdTarget(de.Target)));
                 }
             }
             

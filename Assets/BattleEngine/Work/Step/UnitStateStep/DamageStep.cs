@@ -1,0 +1,24 @@
+using BattleEngine.Enums;
+using BattleEngine.Work.Step.Target;
+
+namespace BattleEngine.Work.Step.UnitStateStep
+{
+    public record DamageStep(
+        int Attacker,
+        ITarget Target,
+        int Amount,
+        DamageSource Source
+        ) : BaseStep, IStepWithTarget
+  
+    {
+        public ITarget GetTarget()
+        {
+            return Target;
+        }
+
+        public IStepWithTarget ChangeTarget(ITarget target)
+        {
+            return this with{Target = target};
+        }
+    }
+}

@@ -1,22 +1,27 @@
 using System.Collections.Generic;
 using BattleEngine.Work.Event;
+using BattleEngine.Work.Step.Target;
+using BattleEngine.Work.Step.UnitStateStep;
+using NUnit.Framework;
 
 namespace BattleEngine.Work.Step.Resolver
 {
-    public class DeathStepResolver : IStepResolver<DeathStep>
+    public static class DeathStepResolver
     {
-        public List<IExecutable> Resolve(DeathStep step, BattleState state)
+        public static List<IExecutable> Resolve(DeathStep step, BattleState state)
         {
-            List<IExecutable> events = new();
-            var unit = state.GetUnit(step.To);
-
-            if (unit != null)
-            {
-                events.Add(new DeathEvent(
-                    step.To,
-                    unit.Stats.Type.ToString()));
-            }
-            return events;
+            Assert.IsInstanceOf<IdTarget>(step.Target);
+            var exec = new List<IExecutable>();
+            
+            var target = state.GetUnit(((IdTarget)step.Target).Id);
+            if (target == null) return exec;
+            
+            exec.Add(new DeathEvent(
+                target.UnitId,
+                target.Stats.Type.ToString()
+                ));
+            
+            return exec;
         }
     }
 }

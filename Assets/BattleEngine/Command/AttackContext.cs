@@ -1,10 +1,11 @@
+using BattleEngine.Cards;
 using BattleEngine.Unit.Attack;
 
 namespace BattleEngine.Command
 {
     public sealed record AttackContext(
-        int From, 
-        int To, 
+        Position FromPos, 
+        Position ToPos, 
         Attack Attack) 
         : CommandContext;
 }

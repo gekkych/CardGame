@@ -1,4 +1,6 @@
+using BattleEngine.Cards;
 using BattleEngine.Command;
+using BattleEngine.Enums;
 using BattleEngine.Unit;
 using BattleEngine.Unit.Attack;
 using BattleEngine.Unit.Component;
@@ -13,13 +15,26 @@ namespace BattleEngine
         [Test]
         public void BattleTest()
         {
-          
-        }
+            BattleState initialState =  new BattleState(5, 8);
+            var warrior = UnitLibrary.Warrior();
+            var slime = UnitLibrary.Slime();
+            slime.AddComp(new ThornComp(3));
+            initialState.Board.Add(new Position(2, 3), warrior);
+            initialState.Board.Add(new Position(2, 5), slime);
 
-        [Test]
-        public void RageOnDamage()
-        {
-          
+            
+            BattleEngine engine = new BattleEngine(initialState);
+            engine.TestInit(initialState);
+
+            var events = engine.Turn(new AttackContext(
+                new Position(2, 3),
+                new Position(2, 5),
+                AttackLibrary.FireSpear()));
+
+            foreach (var e in events)
+            {
+                TestContext.WriteLine(EventMessage.ToString(e));
+            }
         }
     }
 }

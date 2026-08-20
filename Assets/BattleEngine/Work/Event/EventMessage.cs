@@ -23,6 +23,10 @@ namespace BattleEngine.Work.Event
                 ReplaceCompEvent rce =>
                     $"#{rce.Target} {rce.TargetName}'s component {rce.ToReplace} changed",
                 
+                AddCompEvent ace =>
+                    $"#{ace.Target} {ace.TargetName}'s component {ace.ComponentName} added",
+
+                
                 RemoveCompEvent rce =>
                     $"#{rce.Target} {rce.TargetName}'s component {rce.ComponentName} removed",
                 

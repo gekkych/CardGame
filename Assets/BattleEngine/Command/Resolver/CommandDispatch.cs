@@ -9,9 +9,7 @@ namespace BattleEngine.Command.Resolver
         {
             return ctx switch
             {
-                AttackContext attackContext =>
-                    new AttackCommandResolver().Resolve(state, attackContext),
-
+                AttackContext attackContext => new AttackCommandResolver().Resolve(state, attackContext),
                 _ => new List<BaseStep>()
             };
         }

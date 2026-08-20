@@ -22,9 +22,9 @@ namespace BattleEngine.Unit
         
         public BaseUnit(int id, UnitStats stats, UnitState state)
         {
-            this.UnitId = id;
-            this.Stats = stats;
-            this.State = state;
+            UnitId = id;
+            Stats = stats;
+            State = state;
         }
         
         

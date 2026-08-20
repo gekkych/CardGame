@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BattleEngine.Unit;
@@ -15,6 +16,14 @@ namespace BattleEngine.Cards
         {
             Width = w;
             Height = h;
+            
+            for (int i = 0; i < w; i++)
+            {
+                for (int j = 0; j < h; j++)
+                {
+                    _positions.Add(new Position(i, j), null);
+                }
+            }
         }
 
         public BaseUnit GetUnit(int id)
@@ -35,13 +44,15 @@ namespace BattleEngine.Cards
 
         public void Add(Position pos, BaseUnit unit)
         {
+            if (!_positions.ContainsKey(pos)) throw new ArgumentException("no pos");
             if (MaxPosition.x < pos.x || MaxPosition.y < pos.y) return;
             if (_positions[pos] != null) return;
-            _positions.Add(pos, unit);
+            _positions[pos] = unit;
         }
         
         public void RemoveAt(Position pos)
         {
+            if (!_positions.ContainsKey(pos)) throw new ArgumentException("no pos");
             if (MaxPosition.x < pos.x || MaxPosition.y < pos.y) return;
             _positions.Remove(pos);
         }

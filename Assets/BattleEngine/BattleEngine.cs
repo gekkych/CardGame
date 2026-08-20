@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BattleEngine.Command;
@@ -8,7 +9,7 @@ using BattleEngine.Work;
 using BattleEngine.Work.Event;
 using BattleEngine.Work.Event.Applier;
 using BattleEngine.Work.Step;
-using BattleEngine.Work.Step.Resolver;
+using BattleEngine.Work.Step.Target;
 
 namespace BattleEngine
 {
@@ -19,20 +20,26 @@ namespace BattleEngine
         private List<BaseEvent> _buff = new();
         private BattleState _state;
         private List<BaseReaction> _reactions = new();
+        private Dictionary<int, int?> _lastTargets = new();
 
         public BattleEngine(int width, int height)
         {
             UnitIdGenerator.Reset();
             _state = new BattleState(width, height);
         }
+
+        public BattleEngine(BattleState initialState)
+        {
+            UnitIdGenerator.Reset();
+            _state =  initialState;
+        }
         
         public void TestInit(BattleState initialState)
         {
             _state = initialState;
+            _reactions.Add(new DeathR());
+            _reactions.Add(new ThornR());
             
-            _reactions = new();
-           var rs1 = new DeathR();
-           _reactions.Add(rs1);
            _reactions.Sort((x, y) => x.Priority.CompareTo(y.Priority));
         
         }
@@ -79,6 +86,7 @@ namespace BattleEngine
                 }
             }
         }
+        
         private void ProcessStep(BaseStep step, int depth)
         {
             if (depth == 0)
@@ -88,10 +96,21 @@ namespace BattleEngine
                     react.NewRootStep();
                 }
             }
-            var events = StepDispatch.Resolve(step, _state).ToList();
-
-            events.Reverse();
-            foreach (var e in events)
+            //#TODO ADD TARGET RESOLVING
+            List<IExecutable> executables = new();
+            
+            _lastTargets.TryGetValue(depth, out var last);
+            executables.AddRange(TargetResolver.Resolve(step, _state, last ?? -1));
+            
+            if (executables.Count == 0) 
+            {
+                if (step is IStepWithTarget swt) _lastTargets[depth-1] = ((IdTarget)swt.GetTarget()).Id;
+                executables.AddRange(StepDispatch.Resolve(step, _state).ToList());
+            }
+            
+            executables.Reverse();
+            
+            foreach (var e in executables)
             {
                 switch (e)
                 {

@@ -1,15 +1,19 @@
 using BattleEngine.Work.Step;
+using BattleEngine.Work.Step.Target;
+using BattleEngine.Work.Step.UnitStateStep;
+using NUnit.Framework;
 
-//test calc
 namespace BattleEngine.Calculation
 {
-    public class DamageCalculator
+    public static class DamageCalculator
     {
-        public int Calc(DamageStep step, BattleState state)
+        //Ensure Target is IdTarget
+        public static int Calc(DamageStep step, BattleState state)
         {
+            Assert.IsInstanceOf<IdTarget>(step.Target);
             int damage = step.Amount;
-            var target = state.GetUnit(step.To);
-            var attacker = state.GetUnit(step.From);
+            var target = state.GetUnit(((IdTarget)step.Target).Id);
+            var attacker = state.GetUnit(step.Attacker);
             damage += attacker.State.StrengthBonus;
             int targetHp = target.State.CurrHp;
             return damage > targetHp ? targetHp : damage;

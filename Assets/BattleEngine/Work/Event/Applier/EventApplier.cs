@@ -29,6 +29,10 @@ namespace BattleEngine.Work.Event.Applier
                     state.GetUnit(removeCompEvent.Target).RemoveComp(removeCompEvent.ComponentName);
                     break;
                 
+                case AddCompEvent addCompEvent:
+                    state.GetUnit(addCompEvent.Target).AddComp(addCompEvent.Added);
+                    break;
+                
                 case ReplaceCompEvent replaceCompEvent:
                     state.GetUnit(replaceCompEvent.Target).RemoveComp(replaceCompEvent.OldComponent.Name);
                     state.GetUnit(replaceCompEvent.Target).AddComp(replaceCompEvent.NewComponent);
