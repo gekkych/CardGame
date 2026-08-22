@@ -1,15 +1,14 @@
-using BattleEngine.Enums;
 using BattleEngine.Work.Step.Interfaces;
 using BattleEngine.Work.Step.Target;
 
+//#TODO ADD RESOLVER+CALCULATOR
 namespace BattleEngine.Work.Step.UnitStateStep
 {
-    public record DamageStep(
-        int Attacker,
+    public record HealStep(
+        int Healer,
         ITarget Target,
-        int Amount,
-        DamageSource Source
-        ) : BaseStep, IStepWithTarget, IStepWithPerformer
+        int Amount
+    ) : BaseStep, IStepWithTarget, IStepWithPerformer
   
     {
         public ITarget GetTarget() => Target;

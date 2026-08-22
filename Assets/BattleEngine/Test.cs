@@ -1,6 +1,5 @@
 using BattleEngine.Cards;
 using BattleEngine.Command;
-using BattleEngine.Enums;
 using BattleEngine.Unit;
 using BattleEngine.Unit.Attack;
 using BattleEngine.Unit.Component;

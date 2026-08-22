@@ -26,14 +26,28 @@ namespace BattleEngine.Cards
             }
         }
 
+        public bool InBounds(Position pos)
+        {
+            return (MaxPosition.x < pos.x || MaxPosition.y < pos.y);
+        }
         public BaseUnit GetUnit(int id)
         {
             return _positions.Values.FirstOrDefault(u => u?.UnitId == id);
         }
 
+        public Position? GetPosition(BaseUnit unit)
+        {
+            foreach (var p in _positions.Keys.ToList())
+            {
+                if (unit == _positions[p]) return p;
+            }
+
+            return Position.TryGetError();
+        }
+
         public BaseUnit GetUnitAt(Position pos)
         {
-            if (MaxPosition.x < pos.x || MaxPosition.y < pos.y) return null;
+            if (!InBounds(pos)) return null;
             return _positions.GetValueOrDefault(pos);
         }
 
@@ -42,10 +56,19 @@ namespace BattleEngine.Cards
             return _positions.Values.Where(u => u != null).ToList();
         }
 
+        public List<BaseUnit> GetUnitsInPattern(Position center, Pattern pattern)
+        {
+            return pattern.GetAbsolutePositions(center)
+                .Where(InBounds)
+                .Select(GetUnitAt)
+                .Where(u => u != null)
+                .ToList();
+        }
+
         public void Add(Position pos, BaseUnit unit)
         {
             if (!_positions.ContainsKey(pos)) throw new ArgumentException("no pos");
-            if (MaxPosition.x < pos.x || MaxPosition.y < pos.y) return;
+            if (!InBounds(pos)) return;
             if (_positions[pos] != null) return;
             _positions[pos] = unit;
         }
@@ -53,7 +76,7 @@ namespace BattleEngine.Cards
         public void RemoveAt(Position pos)
         {
             if (!_positions.ContainsKey(pos)) throw new ArgumentException("no pos");
-            if (MaxPosition.x < pos.x || MaxPosition.y < pos.y) return;
+            if (!InBounds(pos)) return;
             _positions.Remove(pos);
         }
 

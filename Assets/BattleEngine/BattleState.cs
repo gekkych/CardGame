@@ -40,5 +40,11 @@ namespace BattleEngine
         {
             return Board.GetAllUnits();
         }
+
+        [CanBeNull]
+        public List<BaseUnit> GetUnitsInPattern(Position center, Pattern pattern)
+        {
+            return Board.GetUnitsInPattern(center, pattern);
+        }
     }
 }

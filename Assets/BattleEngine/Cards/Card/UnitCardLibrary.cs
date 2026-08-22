@@ -10,8 +10,6 @@ namespace BattleEngine.Cards.Card
             var card = new BaseUnitCard();
             card.Cost = 2;
             
-            UnitStats stats = new UnitStats(UnitType.Healer, 6, 0);
-            var u = new BaseUnit(stats);
             
             return card;
         }

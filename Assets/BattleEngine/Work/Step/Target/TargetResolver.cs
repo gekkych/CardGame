@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BattleEngine.Work.Step.Interfaces;
 
 namespace BattleEngine.Work.Step.Target
 {
@@ -24,7 +25,7 @@ namespace BattleEngine.Work.Step.Target
             {
                 if (target != null)
                 {
-                    steps.Add((BaseStep)st.ChangeTarget(new IdTarget((int)target)));
+                    steps.Add((BaseStep)st.WithTarget(new IdTarget((int)target)));
                 }
             }
             if (steps.Count == 0) steps.Add(new DummyStep());

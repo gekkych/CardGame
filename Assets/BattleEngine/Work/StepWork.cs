@@ -1,4 +1,5 @@
 using BattleEngine.Work.Step;
+using BattleEngine.Work.Step.Interfaces;
 
 namespace BattleEngine.Work
 {
