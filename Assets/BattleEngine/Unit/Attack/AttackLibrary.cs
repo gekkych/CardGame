@@ -4,6 +4,7 @@ using BattleEngine.Enums;
 using BattleEngine.Unit.Component;
 using BattleEngine.Work.Step;
 using BattleEngine.Work.Step.CompStep;
+using BattleEngine.Work.Step.Interfaces;
 using BattleEngine.Work.Step.Target;
 using BattleEngine.Work.Step.UnitStateStep;
 

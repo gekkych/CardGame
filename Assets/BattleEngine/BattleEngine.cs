@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using BattleEngine.Command;
@@ -9,6 +8,7 @@ using BattleEngine.Work;
 using BattleEngine.Work.Event;
 using BattleEngine.Work.Event.Applier;
 using BattleEngine.Work.Step;
+using BattleEngine.Work.Step.Interfaces;
 using BattleEngine.Work.Step.Target;
 
 namespace BattleEngine
@@ -53,6 +53,7 @@ namespace BattleEngine
             Execute(CommandDispatch.Resolve(_state, ctx));
             _history.AddRange(_buff);
             _buff.Clear();
+            _lastTargets.Clear();
             return EndBattle();
         }
 

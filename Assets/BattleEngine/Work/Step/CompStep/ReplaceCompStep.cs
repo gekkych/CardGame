@@ -1,5 +1,6 @@
 using BattleEngine.Enums;
 using BattleEngine.Unit.Component;
+using BattleEngine.Work.Step.Interfaces;
 using BattleEngine.Work.Step.Target;
 
 namespace BattleEngine.Work.Step.CompStep
@@ -15,7 +16,7 @@ namespace BattleEngine.Work.Step.CompStep
             return Target;
         }
 
-        public IStepWithTarget ChangeTarget(ITarget target)
+        public IStepWithTarget WithTarget(ITarget target)
         {
             return this with { Target = target };
         }

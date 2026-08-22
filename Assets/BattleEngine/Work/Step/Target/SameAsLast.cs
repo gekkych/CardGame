@@ -10,5 +10,7 @@ namespace BattleEngine.Work.Step.Target
             ids.Add(lastId);
             return ids;
         }
+        
+        public override string ToString() => "SameAsLast";
     }
 }

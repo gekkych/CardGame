@@ -19,5 +19,7 @@ namespace BattleEngine.Work.Step.Target
             ids.Add(state.GetUnit(_id)?.UnitId);
             return ids;
         }
+
+        public override string ToString() => _id.ToString();
     }
 }

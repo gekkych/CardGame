@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BattleEngine.Work.Step.CompStep;
+using BattleEngine.Work.Step.Interfaces;
 using BattleEngine.Work.Step.Resolver;
 using BattleEngine.Work.Step.UnitStateStep;
 

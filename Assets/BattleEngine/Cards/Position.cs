@@ -6,6 +6,8 @@ namespace BattleEngine.Cards
     {
         public int x;
         public int y;
+        
+        public static Position? TryGetError() => null;
 
         public Position(int x, int y)
         {
@@ -31,5 +33,7 @@ namespace BattleEngine.Cards
         {
             return HashCode.Combine(x, y);
         }
+        
+        public override string ToString() => $"({x}, {y})";
     }
 }
