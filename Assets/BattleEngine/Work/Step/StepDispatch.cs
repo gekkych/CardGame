@@ -14,11 +14,12 @@ namespace BattleEngine.Work.Step
             return step switch
             {
                 DummyStep => new List<IExecutable>(),
-                DamageStep damageStep => DamageStepResolver.Resolve(damageStep, state),
-                DeathStep deathStep => DeathStepResolver.Resolve(deathStep, state),
-                AddCompStep addCompStep => AddCompStepResolver.Resolve(addCompStep, state),
-                RemoveCompStep removeCompStep => RemoveCompStepResolver.Resolve(removeCompStep, state),
-                ReplaceCompStep replaceCompStep => ReplaceCompStepResolver.Resolve(replaceCompStep, state),
+                DamageStep damageStep => new DamageStepResolver().Resolve(damageStep, state),
+                HealStep healStep => new HealStepResolver().Resolve(healStep, state),
+                DeathStep deathStep => new DeathStepResolver().Resolve(deathStep, state),
+                AddCompStep addCompStep => new AddCompStepResolver().Resolve(addCompStep, state),
+                RemoveCompStep removeCompStep => new RemoveCompStepResolver().Resolve(removeCompStep, state),
+                ReplaceCompStep replaceCompStep => new ReplaceCompStepResolver().Resolve(replaceCompStep, state),
                 _ => throw new NotImplementedException()
             };
         }

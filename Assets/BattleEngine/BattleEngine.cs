@@ -3,6 +3,7 @@ using System.Linq;
 using BattleEngine.Command;
 using BattleEngine.Command.Resolver;
 using BattleEngine.Reaction;
+using BattleEngine.Reaction.UnitReaction;
 using BattleEngine.Unit;
 using BattleEngine.Work;
 using BattleEngine.Work.Event;
@@ -39,6 +40,8 @@ namespace BattleEngine
             _state = initialState;
             _reactions.Add(new DeathR());
             _reactions.Add(new ThornR());
+            _reactions.Add(new HealerUnitR());
+            _reactions.Add(new VampirismR());
             
            _reactions.Sort((x, y) => x.Priority.CompareTo(y.Priority));
         

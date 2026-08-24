@@ -33,5 +33,46 @@ namespace BattleEngine.Unit.Attack
             a.Steps = steps;
             return a;
         }
+        
+        public static Attack Slash()
+        {
+            var steps = new List<BaseStep>();
+
+            steps.Add(new DamageStep(
+                -1,
+                new PosTarget(new Position(0, 0)),
+                5,
+                DamageSource.Attack
+            ));
+            
+            var a = new Attack();
+            a.ID = 1;
+            a.Steps = steps;
+            return a;
+        }
+        
+        public static Attack DoubleSlash()
+        {
+            var steps = new List<BaseStep>();
+
+            steps.Add(new DamageStep(
+                -1,
+                new PosTarget(new Position(0, 0)),
+                5,
+                DamageSource.Attack
+            ));
+            
+            steps.Add(new DamageStep(
+                -1,
+                new PosTarget(new Position(0, 0)),
+                5,
+                DamageSource.Attack
+            ));
+            
+            var a = new Attack();
+            a.ID = 1;
+            a.Steps = steps;
+            return a;
+        }
     }
 }

@@ -3,9 +3,10 @@ namespace BattleEngine.Enums
     public enum ComponentName
     {
         //UnitComp TAGS
-        Healer,
+        HealerUnit,
         
         //Effects
+        Vampirism,
         Thorn,
         RageOnDamage,
         Burn

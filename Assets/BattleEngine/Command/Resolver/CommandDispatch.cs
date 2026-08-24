@@ -10,6 +10,7 @@ namespace BattleEngine.Command.Resolver
         {
             return ctx switch
             {
+                SkipTurnContext => new List<BaseStep>(),
                 AttackContext attackContext => new AttackCommandResolver().Resolve(state, attackContext),
                 _ => new List<BaseStep>()
             };

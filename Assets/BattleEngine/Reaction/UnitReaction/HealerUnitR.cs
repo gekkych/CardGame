@@ -20,8 +20,8 @@ namespace BattleEngine.Reaction.UnitReaction
             var steps = new List<BaseStep>();
             
             if (e is not EndTurnEvent) return steps;
-                
-            var healers = state.GetAllUnits()?.Where(u => u.HasComp(ComponentName.Healer));
+            
+            var healers = state.GetAllUnits()?.Where(u => u.HasComp(ComponentName.HealerUnit));
 
             if (healers == null) return steps;
             
@@ -29,10 +29,10 @@ namespace BattleEngine.Reaction.UnitReaction
             {
                 var maybePos = state.Board.GetPosition(h);
                 if (maybePos is not { } pos) continue;
-                int healAmount = ((HealerComp)h.GetComp(ComponentName.Healer)).Amount;
+                int healAmount = ((HealerUnitComp)h.GetComp(ComponentName.HealerUnit)).Amount;
                 bool hasHealerNeighbor = state
                     .GetUnitsInPattern(pos, Pattern.Patterns.Neighbors())?
-                    .Any(u => u.HasComp(ComponentName.Healer)) ?? false;
+                    .Any(u => u.HasComp(ComponentName.HealerUnit)) ?? false;
 
                 if (hasHealerNeighbor) healAmount *= Mult;
                 steps.Add(new HealStep(

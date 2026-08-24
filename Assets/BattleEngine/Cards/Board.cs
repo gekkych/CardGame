@@ -28,8 +28,12 @@ namespace BattleEngine.Cards
 
         public bool InBounds(Position pos)
         {
-            return (pos.x < MaxPosition.x || pos.y < MaxPosition.y);
+            return pos.x >= 0 &&
+                   pos.x < Width &&
+                   pos.y >= 0 &&
+                   pos.y < Height;
         }
+        
         public BaseUnit GetUnit(int id)
         {
             return _positions.Values.FirstOrDefault(u => u?.UnitId == id);
@@ -75,14 +79,20 @@ namespace BattleEngine.Cards
         
         public void RemoveAt(Position pos)
         {
-            if (!_positions.ContainsKey(pos)) throw new ArgumentException("no pos");
-            if (!InBounds(pos)) return;
-            _positions.Remove(pos);
+            if (!_positions.ContainsKey(pos))
+                throw new ArgumentException("no pos");
+
+            if (!InBounds(pos))
+                return;
+
+            _positions[pos] = null;
         }
 
         public void Remove(int id)
         {
-            foreach (var pos in _positions.Keys.ToList().Where(pos => _positions[pos].UnitId == id))
+            foreach (var pos in _positions.Keys
+                         .Where(pos => _positions[pos]?.UnitId == id)
+                         .ToList())
             {
                 _positions.Remove(pos);
             }

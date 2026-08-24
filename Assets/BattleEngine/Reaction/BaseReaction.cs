@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using BattleEngine.Work.Event;
-using BattleEngine.Work.Step;
 using BattleEngine.Work.Step.Interfaces;
 
 namespace BattleEngine.Reaction

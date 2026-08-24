@@ -1,3 +1,4 @@
+using System;
 using BattleEngine.Work.Step;
 using BattleEngine.Work.Step.Target;
 using BattleEngine.Work.Step.UnitStateStep;
@@ -16,7 +17,7 @@ namespace BattleEngine.Calculation
             var attacker = state.GetUnit(step.Attacker);
             damage += attacker.State.StrengthBonus;
             int targetHp = target.State.CurrHp;
-            return damage > targetHp ? targetHp : damage;
+            return Math.Min(damage, targetHp);
         }
     }
 }

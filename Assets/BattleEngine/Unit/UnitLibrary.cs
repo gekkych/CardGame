@@ -38,7 +38,7 @@ namespace BattleEngine.Unit
             var state = UnitState.FromStats(stats);
             BaseUnit healer = new(UnitIdGenerator.Get(), stats, state);
             
-            healer.AddComp(new HealerComp(1));
+            healer.AddComp(new HealerUnitComp(1));
             
             return healer;
         }

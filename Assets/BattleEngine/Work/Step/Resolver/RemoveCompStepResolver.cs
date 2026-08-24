@@ -6,9 +6,9 @@ using NUnit.Framework;
 
 namespace BattleEngine.Work.Step.Resolver
 {
-    public static class RemoveCompStepResolver
+    public class RemoveCompStepResolver : IStepResolver<RemoveCompStep>
     {
-        public static List<IExecutable> Resolve(RemoveCompStep step, BattleState state)
+        public List<IExecutable> Resolve(RemoveCompStep step, BattleState state)
         {
             Assert.IsInstanceOf<IdTarget>(step.Target);
             var events = new List<IExecutable>();

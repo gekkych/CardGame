@@ -6,9 +6,9 @@ using NUnit.Framework;
 
 namespace BattleEngine.Work.Step.Resolver
 {
-    public static class DeathStepResolver
+    public class DeathStepResolver : IStepResolver<DeathStep>
     {
-        public static List<IExecutable> Resolve(DeathStep step, BattleState state)
+        public List<IExecutable> Resolve(DeathStep step, BattleState state)
         {
             Assert.IsInstanceOf<IdTarget>(step.Target);
             var exec = new List<IExecutable>();

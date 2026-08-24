@@ -11,14 +11,9 @@ namespace BattleEngine.Work.Step.CompStep
         BaseComponent Relacement
     ) : BaseStep, IStepWithTarget
     {
-        public ITarget GetTarget()
-        {
-            return Target;
-        }
+        public ITarget GetTarget() => Target;
 
-        public IStepWithTarget WithTarget(ITarget target)
-        {
-            return this with { Target = target };
-        }
+        public IStepWithTarget WithTarget(ITarget target) => this with { Target = target };
+        
     }
 }
