@@ -43,10 +43,10 @@ namespace BattleEngine.Cards
         {
             foreach (var p in _positions.Keys.ToList())
             {
-                if (unit == _positions[p]) return p;
+                if (unit.UnitId == _positions[p].UnitId) return p;
             }
 
-            return Position.TryGetError();
+            return Position.Error;
         }
 
         public BaseUnit GetUnitAt(Position pos)

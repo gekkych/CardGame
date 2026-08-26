@@ -9,10 +9,8 @@ namespace BattleEngine.Work.Step.Target
         private Position _pos;
         public Position Pos  => _pos;
         
-        public PosTarget(Position pos) { 
-            _pos = pos;
-            
-        }
+        public PosTarget(Position pos) => _pos = pos;
+
 
         public List<int?> ResolveTarget(BattleState state, int lastId)
         {

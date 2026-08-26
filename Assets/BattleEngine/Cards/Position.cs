@@ -7,7 +7,12 @@ namespace BattleEngine.Cards
         public int x;
         public int y;
         
-        public static Position? TryGetError() => null;
+        public static Position? Error => null;
+        public static Position Zero => new Position(0, 0);
+        public static Position Up => new Position(0, 1);
+        public static Position Down => new Position(0, -1);
+        public static Position Left => new Position(-1, 0);
+        public static Position Right => new Position(1, 0);
 
         public Position(int x, int y)
         {

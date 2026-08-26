@@ -4,7 +4,7 @@ namespace BattleEngine.Cards
 {
     public class Pattern
     {
-        public List<Position> Offsets { get; set; }
+        public List<Position> Offsets { get; init; }
         
         public IEnumerable<Position> GetAbsolutePositions(Position center)
         {

@@ -8,10 +8,8 @@ namespace BattleEngine.Work.Step.Target
         private int _id;
         public int Id => _id;
 
-        public IdTarget(int id)
-        {
-            _id = id;
-        }
+        public IdTarget(int id) => _id = id;
+
         
         public List<int?> ResolveTarget(BattleState state, int lastId)
         {
