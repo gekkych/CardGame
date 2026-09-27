@@ -1,19 +1,22 @@
 using System.Collections.Generic;
 using BattleEngine.Cards;
+using BattleEngine.Unit;
 
 namespace BattleEngine.Work.Step.Target
 {
     public class FirstOnLineTarget : ITarget
     {
-        private readonly Position _attackerPosition;
+        private readonly BaseUnit _attacker;
         
-        public FirstOnLineTarget(Position attackerPosition) => _attackerPosition = attackerPosition;
+        public FirstOnLineTarget(BaseUnit attacker) => _attacker = attacker;
         
         public List<int?> ResolveTarget(BattleState state, int lastId)
         {
             var target = new List<int?>();
 
-            var curr = _attackerPosition + Position.Up;
+            var maybepos = state.Board.GetPosition(_attacker);
+            if (maybepos is not {} pos) return target;
+            var curr = pos + Position.Up;
             while (state.Board.InBounds(curr))
             {
                 if (state.Board.GetUnitAt(curr) != null) 
