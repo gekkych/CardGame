@@ -94,7 +94,7 @@ namespace BattleEngine.Cards
                          .Where(pos => _positions[pos]?.UnitId == id)
                          .ToList())
             {
-                _positions.Remove(pos);
+                _positions[pos] = null;
             }
         }
     }
