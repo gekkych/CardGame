@@ -1,8 +1,8 @@
 using System.Collections.Generic;
+using BattleEngine.Id.RuntimeId;
 using BattleEngine.Work.Event.ComponentEvent;
 using BattleEngine.Work.Step.CompStep;
 using BattleEngine.Work.Step.Target;
-using NUnit.Framework;
 
 namespace BattleEngine.Work.Step.Resolver
 {
@@ -10,17 +10,18 @@ namespace BattleEngine.Work.Step.Resolver
     {
         public List<IExecutable> Resolve(AddCompStep step, BattleState state)
         {
-            Assert.IsInstanceOf<IdTarget>(step.Target);
             var events = new List<IExecutable>();
+            var ltarget = (IdTarget)step.Target;
+
+            if (!ltarget.Id.To<UnitId>(out var target)) return events;
+            var targetUnit = state.GetUnit(target);
             
-            var target = state.GetUnit(((IdTarget)step.Target).Id);
-            if  (target == null) return events;
-            
-            if (target.HasComp(step.Component.Name)) return events;
+            if  (targetUnit == null) return events;
+            if (targetUnit.HasComp(step.Component.Name)) return events;
             
             events.Add(new AddCompEvent(
-                target.UnitId,
-                target.Stats.Type.ToString(),
+                targetUnit.UnitId,
+                targetUnit.Stats.Type.ToString(),
                 step.Component.Name,
                 step.Component
             ));

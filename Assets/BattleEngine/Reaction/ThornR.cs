@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BattleEngine.Enums;
+using BattleEngine.Id.RuntimeId;
 using BattleEngine.Unit.Component;
 using BattleEngine.Work.Event;
 using BattleEngine.Work.Step.CompStep;
@@ -11,7 +12,7 @@ namespace BattleEngine.Reaction
 {
     public class ThornR : BaseReaction
     {
-        private Dictionary<int, HashSet<int>> _alreadyhit = new(); 
+        private Dictionary<UnitId, HashSet<UnitId>> _alreadyhit = new(); 
 
         public ThornR() => Priority = 1000;
         public override List<BaseStep> React(BaseEvent e, BattleState state)
@@ -21,17 +22,19 @@ namespace BattleEngine.Reaction
             {
                 if (de.Source == DamageSource.Thorn) return steps; 
                 if (de.Attacker == de.Target) return steps;
-                var from = state.GetUnit(de.Attacker);
+                if (!de.Attacker.To<UnitId>(out var attackerId)) return steps;
+                var from = state.GetUnit(attackerId);
                 if (from == null) return steps;
                 
-                var to = state.GetUnit(de.Target);
+                if (!de.Target.To<UnitId>(out var targetId)) return steps;
+                var to = state.GetUnit(targetId);
                 if (to == null) return steps;
 
                 if (!to.HasComp(ComponentName.Thorn)) return steps;
 
                 if (!_alreadyhit.ContainsKey(from.UnitId))
                 {
-                    _alreadyhit.Add(from.UnitId, new HashSet<int>());
+                    _alreadyhit.Add(from.UnitId, new HashSet<UnitId>());
                 }
 
                 if (_alreadyhit[from.UnitId].Contains(to.UnitId)) return steps;
@@ -59,14 +62,14 @@ namespace BattleEngine.Reaction
                         if (comp.RemainingTurns > 1)
                         {
                             steps.Add(new ReplaceCompStep(
-                                new IdTarget(target.UnitId),
+                                new IdTarget(target.UnitId.Raw),
                                 ComponentName.Thorn,
                                 comp with{RemainingTurns = comp.RemainingTurns - 1}));
                         }
                         else
                         {
                             steps.Add(new RemoveCompStep(
-                                new IdTarget(target.UnitId),
+                                new IdTarget(target.UnitId.Raw),
                                 ComponentName.Thorn));
                         }
                     }

@@ -1,20 +1,24 @@
 using System.Collections.Generic;
+using BattleEngine.Enums;
+using BattleEngine.Id;
+using BattleEngine.Id.RuntimeId;
 
 namespace BattleEngine.Work.Step.Target
 {
     //end point target
     public class IdTarget : ITarget
     {
-        private int _id;
-        public int Id => _id;
+        private IdUnion _id;
+        public IdUnion Id => _id;
 
-        public IdTarget(int id) => _id = id;
+        public IdTarget(IdUnion id) => _id = id;
 
         
-        public List<int?> ResolveTarget(BattleState state, int lastId)
+        public List<IdUnion> ResolveTarget(BattleState state, IdUnion lastId)
         {
-            List<int?> ids = new();
-            ids.Add(state.GetUnit(_id)?.UnitId);
+            List<IdUnion> ids = new();
+            if (_id.To<UnitId>(out var unitID)) ids.Add(unitID.Raw);
+            if (_id.To<BattlerId>(out var battlerID)) ids.Add(battlerID.Raw);
             return ids;
         }
 

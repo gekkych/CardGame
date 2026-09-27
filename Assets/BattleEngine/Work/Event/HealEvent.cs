@@ -1,9 +1,11 @@
+using BattleEngine.Id;
+
 namespace BattleEngine.Work.Event
 {
     public record HealEvent(
-        int Healer,
+        IdUnion Healer,
         string HealerName,
-        int To,
+        IdUnion Target,
         string ToName,
         int Amount,
         int OldValue,

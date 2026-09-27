@@ -1,6 +1,6 @@
-namespace BattleEngine.Enums
+namespace BattleEngine.Id.DefId
 {
-    public enum UnitType
+    public enum UnitDef
     {
         Slime,
         Warrior,

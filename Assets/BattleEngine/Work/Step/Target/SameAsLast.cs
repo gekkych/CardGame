@@ -1,12 +1,13 @@
 using System.Collections.Generic;
+using BattleEngine.Id;
 
 namespace BattleEngine.Work.Step.Target
 {
     public class SameAsLast : ITarget
     {
-        public List<int?> ResolveTarget(BattleState state, int lastId)
+        public List<IdUnion> ResolveTarget(BattleState state, IdUnion lastId)
         {
-            List<int?> ids = new();
+            List<IdUnion> ids = new();
             ids.Add(lastId);
             return ids;
         }

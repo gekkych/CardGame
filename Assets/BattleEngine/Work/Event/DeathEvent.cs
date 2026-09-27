@@ -1,7 +1,9 @@
+using BattleEngine.Id;
+
 namespace BattleEngine.Work.Event
 {
     public record DeathEvent(
-        int To,
+        IdUnion Target,
         string ToName
         ) : BaseEvent;
 }

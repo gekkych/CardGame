@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using BattleEngine.Cards;
-using NUnit.Framework;
+using BattleEngine.Id;
 
 namespace BattleEngine.Work.Step.Target
 {
@@ -12,11 +12,10 @@ namespace BattleEngine.Work.Step.Target
         public PosTarget(Position pos) => _pos = pos;
 
 
-        public List<int?> ResolveTarget(BattleState state, int lastId)
+        public List<IdUnion> ResolveTarget(BattleState state, IdUnion lastId)
         {
-            Assert.IsNotNull(_pos);
-            List<int?> ids = new();
-            ids.Add(state.GetUnitAt(_pos)?.UnitId);
+            List<IdUnion> ids = new();
+            ids.Add(state.GetUnitAt(_pos)?.UnitId.Raw);
             return ids;
         }
         public override string ToString() => _pos.ToString();

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BattleEngine.Command;
 using BattleEngine.Command.Resolver;
+using BattleEngine.Id.RuntimeId;
 using BattleEngine.Reaction;
 using BattleEngine.Reaction.UnitReaction;
 using BattleEngine.Unit;
@@ -21,17 +22,15 @@ namespace BattleEngine
         private List<BaseEvent> _buff = new();
         private BattleState _state;
         private List<BaseReaction> _reactions = new();
-        private Dictionary<int, int?> _lastTargets = new();
+        private Dictionary<int, UnitId> _lastTargets = new();
 
-        public BattleEngine(int width, int height)
+        public BattleEngine(int start, int width, int height)
         {
-            UnitIdGenerator.Reset();
-            _state = new BattleState(width, height);
+            _state = new BattleState(start,width, height);
         }
 
         public BattleEngine(BattleState initialState)
         {
-            UnitIdGenerator.Reset();
             _state =  initialState;
         }
         
@@ -104,11 +103,15 @@ namespace BattleEngine
             List<IExecutable> executables = new();
             
             _lastTargets.TryGetValue(depth, out var last);
-            executables.AddRange(TargetResolver.Resolve(step, _state, last ?? -1));
+            executables.AddRange(TargetResolver.Resolve(step, _state, last?.Raw ?? UnitId.Placeholder.Raw));
             
             if (executables.Count == 0) 
             {
-                if (step is IStepWithTarget swt) _lastTargets[depth-1] = ((IdTarget)swt.GetTarget()).Id;
+                if (step is IStepWithTarget swt)
+                {
+                    if (((IdTarget)swt.GetTarget()).Id.To<UnitId>(out var id)) 
+                        _lastTargets[depth-1] = id;
+                }
                 executables.AddRange(StepDispatch.Resolve(step, _state).ToList());
             }
             

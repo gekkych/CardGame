@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BattleEngine.Cards;
 using BattleEngine.Command;
+using BattleEngine.Id;
 using BattleEngine.Unit;
 using BattleEngine.Unit.Attack;
 using BattleEngine.Unit.Component;
@@ -15,12 +16,12 @@ namespace BattleEngine
         [Test]
         public void BattleTest()
         {
-            BattleState initialState =  new BattleState(6, 8);
-            var lonely = UnitLibrary.Healer();
-            var friend1 = UnitLibrary.Healer();
-            var friend2 = UnitLibrary.Healer();
-            var warrior = UnitLibrary.Warrior();
-            var slime = UnitLibrary.Slime();
+            BattleState initialState =  new BattleState(0, 6, 8);
+            var lonely = UnitLibrary.Healer(initialState.IdProvider);
+            var friend1 = UnitLibrary.Healer(initialState.IdProvider);
+            var friend2 = UnitLibrary.Healer(initialState.IdProvider);
+            var warrior = UnitLibrary.Warrior(initialState.IdProvider);
+            var slime = UnitLibrary.Slime(initialState.IdProvider);
 
             slime.AddComp(new ThornComp(2));
             
@@ -52,10 +53,10 @@ namespace BattleEngine
         [Test]
         public void VampTest()
         {
-            BattleState initialState =  new BattleState(1, 2);
+            BattleState initialState =  new BattleState(0, 1, 2);
             
-            var warrior = UnitLibrary.Warrior();
-            var slime = UnitLibrary.Slime();
+            var warrior = UnitLibrary.Warrior(initialState.IdProvider);
+            var slime = UnitLibrary.Slime(initialState.IdProvider);
             initialState.Board.Add(new Position(0, 0), warrior);
             initialState.Board.Add(new Position(0, 1), slime);
             warrior.AddComp(new VampirismComp(3));

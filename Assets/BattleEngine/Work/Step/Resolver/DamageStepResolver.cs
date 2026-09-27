@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
 using BattleEngine.Calculation;
-using BattleEngine.Unit;
+using BattleEngine.Id.RuntimeId;
 using BattleEngine.Work.Event;
 using BattleEngine.Work.Step.Target;
 using BattleEngine.Work.Step.UnitStateStep;
-using NUnit.Framework;
 
 namespace BattleEngine.Work.Step.Resolver
 {
@@ -12,11 +12,13 @@ namespace BattleEngine.Work.Step.Resolver
     {
         public List<IExecutable> Resolve(DamageStep step, BattleState state)
         {
-            Assert.IsInstanceOf<IdTarget>(step.Target);
             var events = new List<IExecutable>();
 
-            var attacker = state.GetUnit(step.Attacker);
-            var target = state.GetUnit(((IdTarget)step.Target).Id);
+            if (!step.Attacker.To<UnitId>(out var idAttacker))            throw new NotImplementedException();
+            if (!((IdTarget)step.Target).Id.To<UnitId>(out var idTarget)) throw new NotImplementedException();
+            
+            var attacker = state.GetUnit(idAttacker);
+            var target = state.GetUnit(idTarget);
             if (attacker == null) return events;
             if (target == null) return events;
 
@@ -25,7 +27,7 @@ namespace BattleEngine.Work.Step.Resolver
             events.Add(new DamageEvent(
                 step.Attacker, 
                 attacker.Stats.Type.ToString(),
-                target.UnitId, 
+                target.UnitId.Raw, 
                 target.Stats.Type.ToString(),
                 actual, 
                 step.Source,

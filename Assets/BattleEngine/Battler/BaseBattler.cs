@@ -2,6 +2,6 @@ namespace BattleEngine.Battler
 {
     public abstract class BaseBattler
     {
-        BattlerData _battlerData;
+        public BattlerData BattlerData { get; set; }
     }
 }

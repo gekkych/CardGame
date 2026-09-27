@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using BattleEngine.Id.RuntimeId;
 using BattleEngine.Work.Event;
-using BattleEngine.Work.Step;
 using BattleEngine.Work.Step.Interfaces;
 using BattleEngine.Work.Step.Target;
 using BattleEngine.Work.Step.UnitStateStep;
@@ -17,7 +17,8 @@ namespace BattleEngine.Reaction
             
             if (e is DamageEvent de)
             {
-                var unit = state.GetUnit(de.Target);
+                if (!de.Target.To<UnitId>(out var unitId)) return reactions;
+                var unit = state.GetUnit(unitId);
                 if (unit != null && unit.IsDead())
                 {
                     reactions.Add(new DeathStep(new IdTarget(de.Target)));

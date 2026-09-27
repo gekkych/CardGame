@@ -1,11 +1,13 @@
 using BattleEngine.Enums;
+using BattleEngine.Id;
+using BattleEngine.Id.RuntimeId;
 
 namespace BattleEngine.Work.Event
 {
     public record DamageEvent(
-        int Attacker,
+        IdUnion Attacker,
         string AttackerName,
-        int Target,
+        IdUnion Target,
         string TargetName,
         int Amount,
         DamageSource Source,

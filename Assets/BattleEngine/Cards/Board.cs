@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BattleEngine.Id;
+using BattleEngine.Id.RuntimeId;
 using BattleEngine.Unit;
 
 namespace BattleEngine.Cards
@@ -34,16 +36,16 @@ namespace BattleEngine.Cards
                    pos.y < Height;
         }
         
-        public BaseUnit GetUnit(int id)
+        public BaseUnit GetUnit(UnitId id)
         {
-            return _positions.Values.FirstOrDefault(u => u?.UnitId == id);
+            return _positions.Values.FirstOrDefault(u => u?.UnitId.Equals(id) ?? false);
         }
 
         public Position? GetPosition(BaseUnit unit)
         {
             foreach (var p in _positions.Keys.ToList())
             {
-                if (unit.UnitId == _positions[p].UnitId) return p;
+                if (unit?.UnitId.Equals(_positions[p]?.UnitId) ?? false) return p;
             }
 
             return Position.Error;
@@ -88,10 +90,10 @@ namespace BattleEngine.Cards
             _positions[pos] = null;
         }
 
-        public void Remove(int id)
+        public void Remove(UnitId id)
         {
             foreach (var pos in _positions.Keys
-                         .Where(pos => _positions[pos]?.UnitId == id)
+                         .Where(pos => _positions[pos]?.UnitId.Equals(id) ?? false)
                          .ToList())
             {
                 _positions[pos] = null;

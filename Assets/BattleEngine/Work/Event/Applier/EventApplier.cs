@@ -1,3 +1,4 @@
+using BattleEngine.Id.RuntimeId;
 using BattleEngine.Work.Event.ComponentEvent;
 
 namespace BattleEngine.Work.Event.Applier
@@ -9,15 +10,41 @@ namespace BattleEngine.Work.Event.Applier
             switch (e)
             {
                 case DamageEvent damageEvent:
-                    state.GetUnit(damageEvent.Target).State.CurrHp -= damageEvent.Amount;
+                    if (damageEvent.Target.To<UnitId>(out var de_unitId))
+                    {
+                        var unit = state.GetUnit(de_unitId);
+                        unit!.State.CurrHp -= damageEvent.Amount;
+                    }
+                    if (damageEvent.Target.To<BattlerId>(out var de_battlerId))
+                    {
+                        var battler = state.GetBattler(de_battlerId);
+                        battler.BattlerData.Shield -= damageEvent.Amount;
+                    }
+
                     break;
                 
                 case HealEvent healEvent:
-                    state.GetUnit(healEvent.To).State.CurrHp += healEvent.Amount;
+                    if (healEvent.Target.To<UnitId>(out var he_unitId))
+                    {
+                        var unit = state.GetUnit(he_unitId);
+                        unit!.State.CurrHp -= healEvent.Amount;
+                    }
+                    if (healEvent.Target.To<BattlerId>(out var he_battlerId))
+                    {
+                        var battler = state.GetBattler(he_battlerId);
+                        battler.BattlerData.Shield -= healEvent.Amount;
+                    }
                     break;
                 
                 case DeathEvent deathEvent:
-                    state.Board.Remove(deathEvent.To);
+                    if (deathEvent.Target.To<UnitId>(out var dee_unitId))
+                    {
+                        state.Board.Remove(dee_unitId);
+                    }
+                    if (deathEvent.Target.To<BattlerId>(out var dee_battlerId))
+                    {
+                        state.BattlerDied(dee_battlerId);
+                    }
                     break;
                 
                 case BonusChangeEvent bonusChangeEvent:

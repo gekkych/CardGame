@@ -1,8 +1,8 @@
 using System;
-using BattleEngine.Work.Step;
+using BattleEngine.Id.RuntimeId;
+using BattleEngine.Unit;
 using BattleEngine.Work.Step.Target;
 using BattleEngine.Work.Step.UnitStateStep;
-using NUnit.Framework;
 
 namespace BattleEngine.Calculation
 {
@@ -11,13 +11,37 @@ namespace BattleEngine.Calculation
         //Ensure Target is IdTarget
         public static int Calc(DamageStep step, BattleState state)
         {
-            Assert.IsInstanceOf<IdTarget>(step.Target);
+            var targetId = ((IdTarget) step.Target).Id;
+            
+            if (targetId.To<UnitId>(out var unitId)) return CalcUnit(step, state, unitId);
+            if (targetId.To<BattlerId>(out var battlerId)) return CalcBattler(step, state);
+            throw new Exception($"Unknown target id: {targetId}");
+        }
+
+        private static int CalcUnit(DamageStep step, BattleState state, UnitId unitId)
+        {
             int damage = step.Amount;
-            var target = state.GetUnit(((IdTarget)step.Target).Id);
-            var attacker = state.GetUnit(step.Attacker);
-            damage += attacker.State.StrengthBonus;
-            int targetHp = target.State.CurrHp;
+            var targetUnit = state.GetUnit(unitId);
+            
+            //#TODO other types
+            if (step.Attacker.To<UnitId>(out var attackerUnitId)) 
+                damage += UnitAttackerBonus(state.GetUnit(attackerUnitId));
+            
+            int targetHp = targetUnit.State.CurrHp;
             return Math.Min(damage, targetHp);
+        }
+
+        private static int UnitAttackerBonus(BaseUnit attacker)
+        {
+            int damage = 0;
+            damage += attacker.State.StrengthBonus;
+            return damage;
+        }
+
+        //#TODO after battler
+        private static int CalcBattler(DamageStep step, BattleState state)
+        {
+            return 0;
         }
     }
 }

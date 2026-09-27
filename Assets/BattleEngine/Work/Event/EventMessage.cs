@@ -12,10 +12,10 @@ namespace BattleEngine.Work.Event
                     $"{dae.AttackerName} {dae.Attacker} attacks {dae.TargetName} {dae.Target} with {dae.Amount} damage; ({dae.OldValue}->{dae.NewValue}); source: {dae.Source}",
                
                 HealEvent hee =>
-                    $"{hee.ToName} {hee.To} heals by {hee.Amount} ({hee.OldValue}->{hee.NewValue})",
+                    $"{hee.ToName} {hee.Target} heals by {hee.Amount} ({hee.OldValue}->{hee.NewValue})",
                 
                 DeathEvent dee =>
-                    $"{dee.ToName} {dee.To} died",
+                    $"{dee.ToName} {dee.Target} died",
                 
                 BonusChangeEvent bce =>
                     $"{bce.Name} {bce.Id} bonus {bce.Bonus.ToString()} changes for {bce.Delta}",

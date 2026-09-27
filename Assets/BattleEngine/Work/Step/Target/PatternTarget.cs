@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using BattleEngine.Cards;
+using BattleEngine.Id;
+
 namespace BattleEngine.Work.Step.Target
 {
     public class PatternTarget : ITarget
@@ -14,11 +16,11 @@ namespace BattleEngine.Work.Step.Target
             _pattern = pattern;
         }
         
-        public List<int?> ResolveTarget(BattleState state, int lastId)
+        public List<IdUnion> ResolveTarget(BattleState state, IdUnion lastId)
         {
-            return new List<int?>
-                (state.Board.GetUnitsInPattern(_center, _pattern)
-                    .Select((u) => u?.UnitId));
+            return state.Board.GetUnitsInPattern(_center, _pattern)
+                .Select(u => u.UnitId.Raw)
+                .ToList();
         }
     }
 }

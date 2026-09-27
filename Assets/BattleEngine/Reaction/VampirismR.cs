@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BattleEngine.Enums;
+using BattleEngine.Id.RuntimeId;
 using BattleEngine.Unit.Component;
 using BattleEngine.Work.Event;
 using BattleEngine.Work.Step.Interfaces;
@@ -19,14 +20,15 @@ namespace BattleEngine.Reaction
             if (e is DamageEvent de)
             {
                 if (de.Attacker == de.Target) return steps;
-                var from = state.GetUnit(de.Attacker);
+                if (!de.Attacker.To<UnitId>(out var attackerId)) return steps;
+                var from = state.GetUnit(attackerId);
                 if (from == null) return steps;
                 if (!from.HasComp(ComponentName.Vampirism)) return steps;
                 var vampComp = (VampirismComp)from.GetComp(ComponentName.Vampirism);
 
                 steps.Add(new HealStep(
-                    from.UnitId,
-                    new IdTarget(from.UnitId),
+                    from.UnitId.Raw,
+                    new IdTarget(from.UnitId.Raw),
                     vampComp.BaseHeal));
             }
             

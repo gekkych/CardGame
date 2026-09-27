@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
 using BattleEngine.Calculation;
+using BattleEngine.Id.RuntimeId;
 using BattleEngine.Work.Event;
 using BattleEngine.Work.Step.Target;
 using BattleEngine.Work.Step.UnitStateStep;
-using NUnit.Framework;
 
 namespace BattleEngine.Work.Step.Resolver
 {
@@ -11,11 +12,13 @@ namespace BattleEngine.Work.Step.Resolver
     {
         public List<IExecutable> Resolve(HealStep step, BattleState state)
         {
-            Assert.IsInstanceOf<IdTarget>(step.Target);
             var events = new List<IExecutable>();
 
-            var healer = state.GetUnit(step.Healer);
-            var target = state.GetUnit(((IdTarget)step.Target).Id);
+            if (!step.Healer.To<UnitId>(out var idHealer))                throw new NotImplementedException();
+            if (!((IdTarget)step.Target).Id.To<UnitId>(out var idTarget)) throw new NotImplementedException();
+            
+            var healer = state.GetUnit(idHealer);
+            var target = state.GetUnit(idTarget);
             if (healer == null) return events;
             if (target == null) return events;
 
@@ -24,13 +27,14 @@ namespace BattleEngine.Work.Step.Resolver
             events.Add(new HealEvent(
                 step.Healer, 
                 healer.Stats.Type.ToString(),
-                target.UnitId, 
+                target.UnitId.Raw, 
                 target.Stats.Type.ToString(),
                 actual, 
                 target.State.CurrHp,
                 target.State.CurrHp + actual));
             
             return events;
+
         }
     }
 }

@@ -1,26 +1,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using BattleEngine.Enums;
+using BattleEngine.Id;
+using BattleEngine.Id.RuntimeId;
 using BattleEngine.Unit.Component;
 
 namespace BattleEngine.Unit
 {
     public class BaseUnit
     {
-        public int UnitId { get; set; }
+        public UnitId UnitId { get; init; }
         public UnitStats  Stats { get; set; }
         public UnitState State { get; set; }
 
         public List<BaseComponent> comps = new();
 
-        public BaseUnit(UnitStats stats)
+        public BaseUnit(UnitStats stats, IdProvider provider)
         {
-            UnitId = UnitIdGenerator.Get();
+            UnitId = provider.NextUnitId();
             Stats = stats;
             State = UnitState.FromStats(stats);
         }
         
-        public BaseUnit(int id, UnitStats stats, UnitState state)
+        public BaseUnit(UnitId id, UnitStats stats, UnitState state)
         {
             UnitId = id;
             Stats = stats;

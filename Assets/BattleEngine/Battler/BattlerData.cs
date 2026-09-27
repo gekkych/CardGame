@@ -1,9 +1,11 @@
+using BattleEngine.Id.RuntimeId;
+
 namespace BattleEngine.Battler
 {
     public record BattlerData
     {
         //ident
-        public int BattlerId { get; set; }
+        public BattlerId BattlerId { get; set; }
         public BattlerType Type { get; set; }
         
         //curr
