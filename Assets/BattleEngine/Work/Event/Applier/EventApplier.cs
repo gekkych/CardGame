@@ -27,12 +27,12 @@ namespace BattleEngine.Work.Event.Applier
                     if (healEvent.Target.To<UnitId>(out var he_unitId))
                     {
                         var unit = state.GetUnit(he_unitId);
-                        unit!.State.CurrHp -= healEvent.Amount;
+                        unit!.State.CurrHp += healEvent.Amount;
                     }
                     if (healEvent.Target.To<BattlerId>(out var he_battlerId))
                     {
                         var battler = state.GetBattler(he_battlerId);
-                        battler.BattlerData.Shield -= healEvent.Amount;
+                        battler.BattlerData.Shield += healEvent.Amount;
                     }
                     break;
                 
