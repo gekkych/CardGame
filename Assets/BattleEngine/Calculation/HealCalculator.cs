@@ -23,9 +23,7 @@ namespace BattleEngine.Calculation
             int heal = step.Amount;
             var targetUnit = state.GetUnit(unitId);
 
-            
-            int targetHp = targetUnit.State.CurrHp;
-            return Math.Clamp(heal, 0, targetHp);
+            return Math.Clamp(heal, 0, targetUnit.Stats.MaxHealth - targetUnit.State.CurrHp);
         }
 
         private static int UnitHealerBonus(BaseUnit attacker)

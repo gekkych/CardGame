@@ -1,14 +1,14 @@
-using System.Collections.Generic;
+using System.Linq;
 using BattleEngine.Cards;
 using BattleEngine.Command;
-using BattleEngine.Id;
+using BattleEngine.Enums;
 using BattleEngine.Unit;
 using BattleEngine.Unit.Attack;
 using BattleEngine.Unit.Component;
 using BattleEngine.Work.Event;
 using NUnit.Framework;
 
-namespace BattleEngine
+namespace BattleEngine.Tests
 {
     [TestFixture]
     public class Test
@@ -74,6 +74,81 @@ namespace BattleEngine
                     new Position(0,1), 
                     AttackLibrary.Slash()));
         }
+
+        [Test]
+public void ExplosionTest()
+{
+    var initialState = new BattleState(0, 40, 40);
+
+    var warrior = UnitLibrary.Warrior(initialState.IdProvider);
+    var slime1 = UnitLibrary.Slime(initialState.IdProvider);
+    var slime2 = UnitLibrary.Slime(initialState.IdProvider);
+    var slime3 = UnitLibrary.Slime(initialState.IdProvider);
+
+    var warriorHp = warrior.State.CurrHp;
+    var slime3Hp = slime3.State.CurrHp;
+
+    slime1.AddComp(new ThornComp(2));
+    slime2.AddComp(new ThornComp(2));
+    slime3.AddComp(new ThornComp(2));
+
+    initialState.Board.Add(new Position(0, 0), warrior);
+    initialState.Board.Add(new Position(12, 11), slime1);
+    initialState.Board.Add(new Position(12, 13), slime2);
+    initialState.Board.Add(new Position(38, 38), slime3);
+
+    var engine = new BattleEngine(initialState);
+    engine.TestInit(initialState);
+
+    var ctx = new AttackContext(
+        Position.Pos(0, 0),
+        Position.Pos(12, 12),
+        AttackLibrary.Explosion())
+    {
+        AttackerShouldExists = true,
+        TargetShouldExists = false
+    };
+
+    var events = engine.Turn(ctx);
+
+    foreach (var e in events)
+    {
+        TestContext.WriteLine(EventMessage.ToString(e));
+    }
+
+    var damageEvents = events
+        .OfType<DamageEvent>()
+        .ToArray();
+    
+    Assert.That(
+        damageEvents.Select(e => e.Source).ToArray(),
+        Is.EqualTo(new[]
+        {
+            DamageSource.Explosion,
+            DamageSource.Explosion,
+            DamageSource.Thorn,
+            DamageSource.Thorn
+        }));
+    
+    Assert.That(
+        damageEvents.Take(2).Select(e => e.Target).ToArray(),
+        Is.EquivalentTo(new[]
+        {
+            slime1.UnitId.Raw,
+            slime2.UnitId.Raw
+        }));
+    
+    Assert.That(
+        damageEvents.Skip(2).Select(e => e.Target).ToArray(),
+        Is.EqualTo(new[]
+        {
+            warrior.UnitId.Raw,
+            warrior.UnitId.Raw
+        }));
+
+    Assert.That(warrior.State.CurrHp, Is.EqualTo(warriorHp - 10));
+    Assert.That(slime3.State.CurrHp, Is.EqualTo(slime3Hp));
+}
 
         private void Turn(BattleEngine engine, CommandContext ctx, bool showRaw = false)
         {

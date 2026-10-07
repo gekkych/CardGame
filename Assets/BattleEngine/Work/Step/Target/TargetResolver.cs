@@ -13,12 +13,14 @@ namespace BattleEngine.Work.Step.Target
             if (step is not IStepWithTarget st || st.GetTarget() is IdTarget) return steps;
 
             var targets = st.GetTarget().ResolveTarget(state, lastId);
+            int prior = targets.ToGroup ? step.Priority + 1 : 0;
 
-            foreach (var target in targets)
+            foreach (var target in targets.Ids)
             {
                 if (target != null)
                 {
-                    steps.Add((BaseStep)st.WithTarget(new IdTarget(target)));
+                    BaseStep toAdd = (BaseStep)st.WithTarget(new IdTarget(target)) with {Priority = prior};
+                    steps.Add(toAdd);
                 }
             }
             if (steps.Count == 0) steps.Add(new DummyStep());

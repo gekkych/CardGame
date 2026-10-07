@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using BattleEngine.Battler;
 using BattleEngine.Cards;
-using BattleEngine.Enums;
 using BattleEngine.Id;
 using BattleEngine.Id.RuntimeId;
 using BattleEngine.Unit;

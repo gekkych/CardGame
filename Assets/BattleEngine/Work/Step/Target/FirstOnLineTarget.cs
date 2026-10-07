@@ -16,29 +16,29 @@ namespace BattleEngine.Work.Step.Target
             _dir = dir;
         }
         
-        public List<IdUnion> ResolveTarget(BattleState state, IdUnion lastId)
+        public TargetResult ResolveTarget(BattleState state, IdUnion lastId)
         {
             var target = new List<IdUnion>();
 
             var maybepos = state.Board.GetPosition(_attacker);
-            if (maybepos is not {} pos) return target;
+            if (maybepos is not {} pos) return new TargetResult(target);
             var curr = pos + _dir;
             while (state.Board.InBounds(curr))
             {
                 if (state.Board.GetUnitAt(curr) != null) 
                 {
                     target.Add(state.Board.GetUnitAt(curr).UnitId.Raw);
-                    return target;
+                    return new TargetResult(target);
                 }
                 curr += _dir;
             }
 
-            target.Add(_dir.y >= 0 ?
+            target.Add(_dir.Y >= 0 ?
                 state.Player.BattlerData.BattlerId.Raw
                 : 
                 state.Opponent.BattlerData.BattlerId.Raw);
 
-            return  target;
+            return new TargetResult(target);
         }
     }
 }

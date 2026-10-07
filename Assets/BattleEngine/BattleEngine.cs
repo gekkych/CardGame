@@ -5,7 +5,6 @@ using BattleEngine.Command.Resolver;
 using BattleEngine.Id.RuntimeId;
 using BattleEngine.Reaction;
 using BattleEngine.Reaction.UnitReaction;
-using BattleEngine.Unit;
 using BattleEngine.Work;
 using BattleEngine.Work.Event;
 using BattleEngine.Work.Event.Applier;
@@ -17,33 +16,37 @@ namespace BattleEngine
 {
     public class BattleEngine
     {
-        private LinkedList<WorkItem> _work = new();
-        private List<BaseEvent> _history = new();
-        private List<BaseEvent> _buff = new();
+        private readonly WorkScheduler _work = new();
+
+        private readonly List<BaseEvent> _history = new();
+        private readonly List<BaseEvent> _buff = new();
+        private readonly List<BaseReaction> _reactions = new();
+        private readonly Dictionary<int, UnitId> _lastTargets = new();
+
         private BattleState _state;
-        private List<BaseReaction> _reactions = new();
-        private Dictionary<int, UnitId> _lastTargets = new();
+        //#TODO make later IReadOnlyBattleState
+        public BattleState State => _state;
 
         public BattleEngine(int start, int width, int height)
         {
-            _state = new BattleState(start,width, height);
+            _state = new BattleState(start, width, height);
         }
 
         public BattleEngine(BattleState initialState)
         {
-            _state =  initialState;
+            _state = initialState;
         }
-        
+
         public void TestInit(BattleState initialState)
         {
             _state = initialState;
+
             _reactions.Add(new DeathR());
             _reactions.Add(new ThornR());
             _reactions.Add(new HealerUnitR());
             _reactions.Add(new VampirismR());
-            
-           _reactions.Sort((x, y) => x.Priority.CompareTo(y.Priority));
-        
+
+            _reactions.Sort((x, y) => x.Priority.CompareTo(y.Priority));
         }
 
         public List<BaseEvent> Turn(CommandContext ctx)
@@ -52,44 +55,46 @@ namespace BattleEngine
             {
                 react.NewTurn();
             }
+
             Execute(CommandDispatch.Resolve(_state, ctx));
+
             _history.AddRange(_buff);
             _buff.Clear();
             _lastTargets.Clear();
+
             return EndBattle();
         }
 
         public List<BaseEvent> EndBattle()
         {
-            var r = _history.ToList();
+            var result = _history.ToList();
             _history.Clear();
-            return r;
+
+            return result;
         }
-        
+
         private void Execute(IEnumerable<BaseStep> rootSteps)
         {
-            _work.AddFirst(new EventWork(new EndTurnEvent(_state.Turn + 1), 0, 0));
-            foreach (var step in rootSteps.Reverse())
-                _work.AddFirst(new StepWork(step, 0));
+            _work.Push(new EventWork(new EndTurnEvent(_state.Turn + 1), 0, 0));
 
-            while (_work.Count > 0)
+            _work.PushRange(rootSteps.Select(step =>
+                    (WorkItem)new StepWork(step, 0){Priority = step.Priority}));
+
+            while (_work.TryPop(out var work))
             {
-                var work = _work.First!.Value;
-                _work.RemoveFirst();
-
                 switch (work)
                 {
                     case StepWork step:
-                        ProcessStep(step.Step,step.Depth);
+                        ProcessStep(step.Step, step.Depth);
                         break;
 
-                    case EventWork evt:
-                        ProcessEvent(evt.Event, evt.Depth, evt.NextReact);
+                    case EventWork evt: 
+                        ProcessEvent(evt.Event, evt.Depth, evt.NextReact, evt.Applied);
                         break;
                 }
             }
         }
-        
+
         private void ProcessStep(BaseStep step, int depth)
         {
             if (depth == 0)
@@ -99,60 +104,73 @@ namespace BattleEngine
                     react.NewRootStep();
                 }
             }
-            //#TODO ADD TARGET RESOLVING
+
+            var currPriority = step.Priority;
+
             List<IExecutable> executables = new();
-            
             _lastTargets.TryGetValue(depth, out var last);
-            executables.AddRange(TargetResolver.Resolve(step, _state, last?.Raw ?? UnitId.Placeholder.Raw));
-            
-            if (executables.Count == 0) 
+
+            executables.AddRange(
+                TargetResolver.Resolve(
+                    step,
+                    _state,
+                    last?.Raw ?? UnitId.Placeholder.Raw));
+
+            if (executables.Count == 0)
             {
                 if (step is IStepWithTarget swt)
                 {
-                    if (((IdTarget)swt.GetTarget()).Id.To<UnitId>(out var id)) 
-                        _lastTargets[depth-1] = id;
+                    if (((IdTarget)swt.GetTarget()).Id.To<UnitId>(out var id))
+                    {
+                        _lastTargets[depth - 1] = id;
+                    }
                 }
-                executables.AddRange(StepDispatch.Resolve(step, _state).ToList());
+
+                executables.AddRange(StepDispatch.Resolve(step, _state));
             }
-            
-            executables.Reverse();
-            
-            foreach (var e in executables)
-            {
-                switch (e)
-                {
-                    case BaseEvent be:
-                        _work.AddFirst(new EventWork(be, depth + 1, 0));
-                        break;
-                    case BaseStep bs:
-                        _work.AddFirst(new StepWork(bs, depth + 1));
-                        break;
-                }
-            }
+
+            _work.PushRange(
+                executables.Select<IExecutable, WorkItem>(executable =>
+                    executable switch
+                    {
+                        BaseEvent evt =>
+                            new EventWork(evt, depth + 1, 0)
+                            {
+                                Applied = false,
+                                Priority = currPriority
+                            },
+
+                        BaseStep childStep =>
+                            new StepWork(childStep, depth + 1)
+                            {
+                                Priority = childStep.Priority
+                            },
+
+                        _ => throw new System.InvalidOperationException(
+                            $"Unsupported executable: {executable.GetType()}")
+                    }));
         }
-        private void ProcessEvent(BaseEvent e, int depth, int nextReaction)
+
+        private void ProcessEvent(BaseEvent e, int depth, int nextReaction, bool applied)
         {
-            if (nextReaction == 0)
+            if (!applied)
             {
                 EventApplier.Apply(e, _state);
                 _buff.Add(e);
+                _work.Push(new EventWork(e, depth, 0) {Applied = true, Priority = 0});
+                return;
             }
 
             if (nextReaction >= _reactions.Count)
                 return;
 
             var reaction = _reactions[nextReaction];
-
-            var steps = reaction
-                .React(e, _state)
-                .ToList();
+            var steps = reaction.React(e, _state).ToList();
             
-            _work.AddFirst(
-                new EventWork(e, depth + 1,nextReaction + 1));
-            steps.Reverse();
-            foreach (BaseStep step in steps)
-                _work.AddFirst(
-                    new StepWork(step, depth + 1));
+            // Reaction on event always has prior zero
+            // Result of reaction can be manage locally, so it may have nonzero prior
+            _work.Push(new EventWork(e, depth, nextReaction + 1){Applied = true, Priority = 0});
+            _work.PushRange(steps.Select(step => (WorkItem)new StepWork(step,depth + 1){Priority = step.Priority}));
         }
     }
 }

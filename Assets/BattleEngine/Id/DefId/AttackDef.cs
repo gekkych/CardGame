@@ -4,6 +4,7 @@ namespace BattleEngine.Id.DefId
     {
         FireSpear,
         Slash,
-        DoubleSlash
+        DoubleSlash,
+        Explosion
     }
 }

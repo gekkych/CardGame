@@ -5,11 +5,11 @@ namespace BattleEngine.Work.Step.Target
 {
     public class SameAsLast : ITarget
     {
-        public List<IdUnion> ResolveTarget(BattleState state, IdUnion lastId)
+        public TargetResult ResolveTarget(BattleState state, IdUnion lastId)
         {
             List<IdUnion> ids = new();
             ids.Add(lastId);
-            return ids;
+            return new TargetResult(ids);
         }
         
         public override string ToString() => "SameAsLast";

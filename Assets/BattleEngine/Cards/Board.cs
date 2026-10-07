@@ -30,10 +30,10 @@ namespace BattleEngine.Cards
 
         public bool InBounds(Position pos)
         {
-            return pos.x >= 0 &&
-                   pos.x < Width &&
-                   pos.y >= 0 &&
-                   pos.y < Height;
+            return pos.X >= 0 &&
+                   pos.X < Width &&
+                   pos.Y >= 0 &&
+                   pos.Y < Height;
         }
         
         public BaseUnit GetUnit(UnitId id)

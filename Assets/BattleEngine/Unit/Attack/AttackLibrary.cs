@@ -29,9 +29,11 @@ namespace BattleEngine.Unit.Attack
                 new BurnComp(3, 2)
                 ));
 
-            var a = new Attack();
-            a.ID = AttackDef.FireSpear;
-            a.Steps = steps;
+            var a = new Attack
+            {
+                ID = AttackDef.FireSpear,
+                Steps = steps
+            };
             return a;
         }
         
@@ -46,9 +48,11 @@ namespace BattleEngine.Unit.Attack
                 DamageSource.Attack
             ));
             
-            var a = new Attack();
-            a.ID = AttackDef.Slash;
-            a.Steps = steps;
+            var a = new Attack
+            {
+                ID = AttackDef.Slash,
+                Steps = steps
+            };
             return a;
         }
         
@@ -70,9 +74,30 @@ namespace BattleEngine.Unit.Attack
                 DamageSource.Attack
             ));
             
-            var a = new Attack();
-            a.ID = AttackDef.DoubleSlash;
-            a.Steps = steps;
+            var a = new Attack
+            {
+                ID = AttackDef.DoubleSlash,
+                Steps = steps
+            };
+            return a;
+        }
+
+        public static Attack Explosion()
+        {
+            var steps = new List<BaseStep>();
+            
+            steps.Add(new DamageStep(
+                UnitId.Placeholder.Raw,
+                new PatternTarget(new Position(0, 0), Pattern.Patterns.Radius(3)),
+                5,
+                DamageSource.Explosion));
+
+            var a = new Attack
+            {
+                ID = AttackDef.Explosion,
+                Steps = steps
+            };
+
             return a;
         }
     }
