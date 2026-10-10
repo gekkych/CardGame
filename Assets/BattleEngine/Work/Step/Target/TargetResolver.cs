@@ -13,7 +13,7 @@ namespace BattleEngine.Work.Step.Target
             if (step is not IStepWithTarget st || st.GetTarget() is IdTarget) return steps;
 
             var targets = st.GetTarget().ResolveTarget(state, lastId);
-            int prior = targets.ToGroup ? step.Priority + 1 : 0;
+            int prior = targets.ToGroup ? step.Priority + 1 : step.Priority;
 
             foreach (var target in targets.Ids)
             {

@@ -6,8 +6,8 @@ namespace BattleEngine.Id
 {
     public class IdUnion
     {
-        private IdType _idType;
-        private int _id;
+        private readonly IdType _idType;
+        private readonly int _id;
 
         public IdUnion(IdType idType, int id)
         {
@@ -35,5 +35,32 @@ namespace BattleEngine.Id
         }
 
         public override string ToString() => _id.ToString();
+        
+        public static bool operator ==(IdUnion left, IdUnion right)
+        {
+            if (left is null)
+                return right is null;
+
+            if (right is null)
+                return false;
+
+            return left._idType == right._idType &&
+                   left._id == right._id;
+        }
+
+        public static bool operator !=(IdUnion left, IdUnion right)
+        {
+            return !(left == right);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is IdUnion other && this == other;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_idType, _id);
+        }
     }
 }

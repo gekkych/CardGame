@@ -21,8 +21,14 @@ namespace BattleEngine.Tests
         {
             var scheduler = new WorkScheduler();
 
-            var standard = new EventWork(
-                new DeathEvent(UnitId(1), "standard"),
+            var standard1 = new EventWork(
+                new DeathEvent(UnitId(1), "standard1"),
+                Depth: 0,
+                NextReact: 0
+            );
+            
+            var standard2 = new EventWork(
+                new DeathEvent(UnitId(1), "standard2"),
                 Depth: 0,
                 NextReact: 0
             );
@@ -36,14 +42,18 @@ namespace BattleEngine.Tests
                 Priority = 1
             };
 
-            scheduler.Push(standard); // Priority = 0
-            scheduler.Push(priority); // Priority = 1
+            scheduler.Push(standard2); 
+            scheduler.Push(priority);
+            scheduler.Push(standard1);
 
             Assert.That(scheduler.TryPop(out var first), Is.True);
             Assert.That(first, Is.EqualTo(priority));
 
             Assert.That(scheduler.TryPop(out var second), Is.True);
-            Assert.That(second, Is.EqualTo(standard));
+            Assert.That(second, Is.EqualTo(standard1));
+            
+            Assert.That(scheduler.TryPop(out var third), Is.True);
+            Assert.That(third, Is.EqualTo(standard2));
         }
 
         [Test]
@@ -69,8 +79,8 @@ namespace BattleEngine.Tests
                 Priority = 1
             };
 
-            scheduler.Push(priority5);
             scheduler.Push(priority1);
+            scheduler.Push(priority5);
 
             scheduler.TryPop(out var first);
             scheduler.TryPop(out var second);
