@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using BattleEngine.Battler;
 using BattleEngine.Cards;
 using BattleEngine.Id;
@@ -7,13 +6,14 @@ using BattleEngine.Id.RuntimeId;
 using BattleEngine.Unit;
 using JetBrains.Annotations;
 
-namespace BattleEngine
+namespace BattleEngine.State
 {
     public class BattleState
     {
         public IdProvider IdProvider { get; }
-        public BaseBattler Player { get; set; }
-        public BaseBattler Opponent { get; set; }
+        public BattlersStateManager BattlersStateManager { get; }
+        public List<BaseBattler> Players { get; set; }
+        public List<BaseBattler> Opponents { get; set; }
         public Board Board { get; set; }
         
         public int Turn { get; set; }
@@ -21,8 +21,9 @@ namespace BattleEngine
         public BattleState(int start, int width, int height)
         {
             IdProvider = new IdProvider(start);
-            Player = null;
-            Opponent = null;
+            BattlersStateManager = new BattlersStateManager(this);
+            Players = new List<BaseBattler>();
+            Opponents = new List<BaseBattler>();
             Board = new Board(width, height);
             Turn = 1;
         }
@@ -35,9 +36,7 @@ namespace BattleEngine
 
         public BaseBattler GetBattler(BattlerId id)
         {
-            if (Player.BattlerData.BattlerId.Equals(id)) return Player;
-            if (Opponent.BattlerData.BattlerId.Equals(id)) return Opponent;
-            return null;
+            return BattlersStateManager.GetBattler(id);
         }
 
         [CanBeNull]

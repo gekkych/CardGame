@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BattleEngine.State;
 using BattleEngine.Work.Step.CompStep;
 using BattleEngine.Work.Step.Interfaces;
 using BattleEngine.Work.Step.Resolver;

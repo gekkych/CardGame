@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BattleEngine.Cards;
 using BattleEngine.Enums;
+using BattleEngine.State;
 using BattleEngine.Unit.Component.UnitAbilityCompTags;
 using BattleEngine.Work.Event;
 using BattleEngine.Work.Step.Interfaces;

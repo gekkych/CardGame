@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BattleEngine.State;
 using BattleEngine.Work.Step.Interfaces;
 
 namespace BattleEngine.Command.Resolver

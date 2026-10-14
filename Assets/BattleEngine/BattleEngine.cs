@@ -5,6 +5,7 @@ using BattleEngine.Command.Resolver;
 using BattleEngine.Id.RuntimeId;
 using BattleEngine.Reaction;
 using BattleEngine.Reaction.UnitReaction;
+using BattleEngine.State;
 using BattleEngine.Work;
 using BattleEngine.Work.Event;
 using BattleEngine.Work.Event.Applier;

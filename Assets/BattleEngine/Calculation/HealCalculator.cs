@@ -1,5 +1,6 @@
 using System;
 using BattleEngine.Id.RuntimeId;
+using BattleEngine.State;
 using BattleEngine.Unit;
 using BattleEngine.Work.Step.Target;
 using BattleEngine.Work.Step.UnitStateStep;

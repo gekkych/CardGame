@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BattleEngine.Id;
+using BattleEngine.State;
 
 namespace BattleEngine.Work.Step.Target
 {

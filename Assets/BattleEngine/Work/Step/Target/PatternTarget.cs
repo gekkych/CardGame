@@ -1,6 +1,7 @@
 using System.Linq;
 using BattleEngine.Cards;
 using BattleEngine.Id;
+using BattleEngine.State;
 using BattleEngine.Work.Step.Interfaces;
 
 namespace BattleEngine.Work.Step.Target

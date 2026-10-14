@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BattleEngine.Id;
+using BattleEngine.Cards;
 using BattleEngine.Id.RuntimeId;
 using BattleEngine.Unit;
 
-namespace BattleEngine.Cards
+namespace BattleEngine.State
 {
     public class Board
     {

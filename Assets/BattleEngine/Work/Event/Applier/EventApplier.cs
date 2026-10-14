@@ -1,4 +1,5 @@
 using BattleEngine.Id.RuntimeId;
+using BattleEngine.State;
 using BattleEngine.Work.Event.ComponentEvent;
 
 namespace BattleEngine.Work.Event.Applier

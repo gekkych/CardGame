@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BattleEngine.Calculation;
 using BattleEngine.Id.RuntimeId;
+using BattleEngine.State;
 using BattleEngine.Work.Event;
 using BattleEngine.Work.Step.Target;
 using BattleEngine.Work.Step.UnitStateStep;
