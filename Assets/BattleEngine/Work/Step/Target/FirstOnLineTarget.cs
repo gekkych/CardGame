@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using BattleEngine.Cards;
 using BattleEngine.Id;
@@ -38,13 +37,8 @@ namespace BattleEngine.Work.Step.Target
                 curr += _dir;
             }
 
-            //#TODO make this shit not be depended on state battlers
-            // Add get battler on pos/line in state.BattlersStateManger
-            throw new NotImplementedException();
-            target.Add(_dir.Y >= 0 ?
-                state.Players[0].BattlerData.BattlerId.Raw
-                : 
-                state.Opponents[0].BattlerData.BattlerId.Raw);
+            var battler = state.BattlersStateManager.GetBattlerAtExit(curr);
+            if (battler != null) target.Add(battler.BattlerData.BattlerId.Raw);
 
             return new TargetResult(target);
         }

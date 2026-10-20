@@ -18,8 +18,7 @@ namespace BattleEngine.Work.Event.Applier
                     }
                     if (damageEvent.Target.To<BattlerId>(out var de_battlerId))
                     {
-                        var battler = state.GetBattler(de_battlerId);
-                        battler.BattlerData.Shield -= damageEvent.Amount;
+                        state.BattlersStateManager.Damage(de_battlerId, damageEvent.Amount);
                     }
 
                     break;
@@ -32,8 +31,7 @@ namespace BattleEngine.Work.Event.Applier
                     }
                     if (healEvent.Target.To<BattlerId>(out var he_battlerId))
                     {
-                        var battler = state.GetBattler(he_battlerId);
-                        battler.BattlerData.Shield += healEvent.Amount;
+                        state.BattlersStateManager.Heal(he_battlerId, healEvent.Amount);
                     }
                     break;
                 
@@ -44,7 +42,7 @@ namespace BattleEngine.Work.Event.Applier
                     }
                     if (deathEvent.Target.To<BattlerId>(out var dee_battlerId))
                     {
-                        state.BattlerDied(dee_battlerId);
+                        state.BattlersStateManager.BattlerDied(dee_battlerId);
                     }
                     break;
                 

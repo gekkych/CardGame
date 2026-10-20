@@ -18,9 +18,13 @@ namespace BattleEngine.Reaction
             
             if (e is DamageEvent de)
             {
-                if (!de.Target.To<UnitId>(out var unitId)) return reactions;
-                var unit = state.GetUnit(unitId);
-                if (unit != null && unit.IsDead())
+                bool isDead = false;
+                if (de.Target.To<UnitId>(out var unitId))
+                    isDead = state.GetUnit(unitId)?.IsDead() ?? false;
+                if (de.Target.To<BattlerId>(out var battlerId))
+                    isDead = state.GetBattler(battlerId)?.IsDead() ?? false;
+
+                if (isDead)
                 {
                     reactions.Add(new DeathStep(new IdTarget(de.Target)));
                 }

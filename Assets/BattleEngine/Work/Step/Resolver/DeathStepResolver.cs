@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
-using BattleEngine.Id.RuntimeId;
 using BattleEngine.State;
 using BattleEngine.Work.Event;
+using BattleEngine.Work.Event.Metadata;
 using BattleEngine.Work.Step.Target;
 using BattleEngine.Work.Step.UnitStateStep;
 
@@ -14,14 +13,14 @@ namespace BattleEngine.Work.Step.Resolver
         {
             var exec = new List<IExecutable>();
 
-            if (!((IdTarget)step.Target).Id.To<UnitId>(out var targetId)) throw new NotImplementedException();
-            var target = state.GetUnit(targetId);
+            var targetId = ((IdTarget)step.Target).Id;
+            var target = EntityMetadata.FromState(targetId, state);
             if (target == null) return exec;
             
             exec.Add(new DeathEvent(
-                target.UnitId.Raw,
-                target.Stats.Type.ToString()
-                ));
+                targetId,
+                new DeathMetadata(target, target.Health, 0)
+            ));
             
             return exec;
         }

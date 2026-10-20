@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using BattleEngine.Calculation;
-using BattleEngine.Id.RuntimeId;
 using BattleEngine.State;
 using BattleEngine.Work.Event;
+using BattleEngine.Work.Event.Metadata;
 using BattleEngine.Work.Step.Target;
 using BattleEngine.Work.Step.UnitStateStep;
 
@@ -15,24 +14,20 @@ namespace BattleEngine.Work.Step.Resolver
         {
             var events = new List<IExecutable>();
 
-            if (!step.Healer.To<UnitId>(out var idHealer))                throw new NotImplementedException();
-            if (!((IdTarget)step.Target).Id.To<UnitId>(out var idTarget)) throw new NotImplementedException();
-            
-            var healer = state.GetUnit(idHealer);
-            var target = state.GetUnit(idTarget);
+            var targetId = ((IdTarget)step.Target).Id;
+            var healer = EntityMetadata.FromState(step.Healer, state);
+            var target = EntityMetadata.FromState(targetId, state);
             if (healer == null) return events;
             if (target == null) return events;
 
             var actual = HealCalculator.Calc(step, state);
+            if (actual <= 0) return events;
             
             events.Add(new HealEvent(
-                step.Healer, 
-                healer.Stats.Type.ToString(),
-                target.UnitId.Raw, 
-                target.Stats.Type.ToString(),
-                actual, 
-                target.State.CurrHp,
-                target.State.CurrHp + actual));
+                step.Healer,
+                targetId,
+                actual,
+                new HealMetadata(healer, target, target.Health, target.Health + actual)));
             
             return events;
 

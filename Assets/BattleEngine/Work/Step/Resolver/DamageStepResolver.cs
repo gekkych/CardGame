@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using BattleEngine.Calculation;
-using BattleEngine.Id.RuntimeId;
 using BattleEngine.State;
 using BattleEngine.Work.Event;
+using BattleEngine.Work.Event.Metadata;
 using BattleEngine.Work.Step.Target;
 using BattleEngine.Work.Step.UnitStateStep;
 
@@ -15,25 +14,21 @@ namespace BattleEngine.Work.Step.Resolver
         {
             var events = new List<IExecutable>();
 
-            if (!step.Attacker.To<UnitId>(out var idAttacker))            throw new NotImplementedException();
-            if (!((IdTarget)step.Target).Id.To<UnitId>(out var idTarget)) throw new NotImplementedException();
-            
-            var attacker = state.GetUnit(idAttacker);
-            var target = state.GetUnit(idTarget);
+            var targetId = ((IdTarget)step.Target).Id;
+            var attacker = EntityMetadata.FromState(step.Attacker, state);
+            var target = EntityMetadata.FromState(targetId, state);
             if (attacker == null) return events;
             if (target == null) return events;
 
             var actual = DamageCalculator.Calc(step, state);
+            if (actual <= 0) return events;
             
             events.Add(new DamageEvent(
-                step.Attacker, 
-                attacker.Stats.Type.ToString(),
-                target.UnitId.Raw, 
-                target.Stats.Type.ToString(),
-                actual, 
+                step.Attacker,
+                targetId,
+                actual,
                 step.Source,
-                target.State.CurrHp,
-                target.State.CurrHp - actual));
+                new DamageMetadata(attacker, target, target.Health, target.Health - actual)));
             
             return events;
 

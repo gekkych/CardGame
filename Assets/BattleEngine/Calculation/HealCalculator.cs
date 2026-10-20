@@ -15,7 +15,7 @@ namespace BattleEngine.Calculation
             var targetId = ((IdTarget) step.Target).Id;
             
             if (targetId.To<UnitId>(out var unitId)) return CalcUnit(step, state, unitId);
-            if (targetId.To<BattlerId>(out var battlerId)) return CalcBattler(step, state);
+            if (targetId.To<BattlerId>(out var battlerId)) return CalcBattler(step, state, battlerId);
             throw new Exception($"Unknown target id: {targetId}");
         }
 
@@ -31,11 +31,13 @@ namespace BattleEngine.Calculation
         {
             return 0;
         }
-
-        //#TODO after battler
-        private static int CalcBattler(HealStep step, BattleState state)
+        
+        private static int CalcBattler(HealStep step, BattleState state, BattlerId battlerId)
         {
-            return 0;
+            var battler = state.GetBattler(battlerId);
+            if (battler == null || battler.IsDead()) return 0;
+            int missing = Math.Max(0, battler.BattlerData.MaxShield - battler.BattlerData.Shield);
+            return Math.Clamp(step.Amount, 0, missing);
         }
     }
 }

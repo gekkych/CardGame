@@ -2,6 +2,7 @@ using BattleEngine.Enums;
 using BattleEngine.Id;
 using BattleEngine.Work;
 using BattleEngine.Work.Event;
+using BattleEngine.Work.Event.Metadata;
 using BattleEngine.Work.Step.Target;
 using BattleEngine.Work.Step.UnitStateStep;
 using NUnit.Framework;
@@ -16,25 +17,31 @@ namespace BattleEngine.Tests
             return new IdUnion(IdType.Unit, id);
         }
 
+        private static DeathEvent Death(int id, string name)
+        {
+            var target = new EntityMetadata(UnitId(id), name, 0, 1, null, null);
+            return new DeathEvent(target.Id, new DeathMetadata(target, 0, 0));
+        }
+
         [Test]
         public void PriorityWork_ShouldBePoppedBeforeStandardWork()
         {
             var scheduler = new WorkScheduler();
 
             var standard1 = new EventWork(
-                new DeathEvent(UnitId(1), "standard1"),
+                Death(1, "standard1"),
                 Depth: 0,
                 NextReact: 0
             );
             
             var standard2 = new EventWork(
-                new DeathEvent(UnitId(1), "standard2"),
+                Death(1, "standard2"),
                 Depth: 0,
                 NextReact: 0
             );
 
             var priority = new EventWork(
-                new DeathEvent(UnitId(2), "priority"),
+                Death(2, "priority"),
                 Depth: 0,
                 NextReact: 0
             )
@@ -62,7 +69,7 @@ namespace BattleEngine.Tests
             var scheduler = new WorkScheduler();
 
             var priority5 = new EventWork(
-                new DeathEvent(UnitId(1), "p5"),
+                Death(1, "p5"),
                 0,
                 0
             )
@@ -71,7 +78,7 @@ namespace BattleEngine.Tests
             };
 
             var priority1 = new EventWork(
-                new DeathEvent(UnitId(2), "p1"),
+                Death(2, "p1"),
                 0,
                 0
             )

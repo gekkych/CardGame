@@ -57,11 +57,6 @@ namespace BattleEngine.State
             return Board.GetUnitsInPattern(center, pattern);
         }
 
-        public void BattlerDied(BattlerId id)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public bool Exists(IdUnion id)
         {
             if (id.To<UnitId>(out var unitId)) return Board.GetUnit(unitId) != null;

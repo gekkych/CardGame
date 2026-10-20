@@ -9,13 +9,13 @@ namespace BattleEngine.Work.Event
             return e switch
             {
                 DamageEvent dae =>
-                    $"{dae.AttackerName} {dae.Attacker} attacks {dae.TargetName} {dae.Target} with {dae.Amount} damage; ({dae.OldValue}->{dae.NewValue}); source: {dae.Source}",
+                    $"{dae.Metadata.Attacker.Name} {dae.Attacker} attacks {dae.Metadata.Target.Name} {dae.Target} with {dae.Amount} damage; ({dae.Metadata.OldValue}->{dae.Metadata.NewValue}); source: {dae.Source}",
                
                 HealEvent hee =>
-                    $"{hee.ToName} {hee.Target} heals by {hee.Amount} ({hee.OldValue}->{hee.NewValue})",
+                    $"{hee.Metadata.Target.Name} {hee.Target} heals by {hee.Amount} ({hee.Metadata.OldValue}->{hee.Metadata.NewValue})",
                 
                 DeathEvent dee =>
-                    $"{dee.ToName} {dee.Target} died",
+                    $"{dee.Metadata.Target.Name} {dee.Target} died",
                 
                 BonusChangeEvent bce =>
                     $"{bce.Name} {bce.Id} bonus {bce.Bonus.ToString()} changes for {bce.Delta}",

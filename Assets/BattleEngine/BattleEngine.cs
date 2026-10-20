@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BattleEngine.Command;
 using BattleEngine.Command.Resolver;
+using BattleEngine.Id;
 using BattleEngine.Id.RuntimeId;
 using BattleEngine.Reaction;
 using BattleEngine.Reaction.UnitReaction;
@@ -22,26 +23,31 @@ namespace BattleEngine
         private readonly List<BaseEvent> _history = new();
         private readonly List<BaseEvent> _buff = new();
         private readonly List<BaseReaction> _reactions = new();
-        private readonly Dictionary<int, UnitId> _lastTargets = new();
+        private readonly Dictionary<int, IdUnion> _lastTargets = new();
 
         private BattleState _state;
         //#TODO make later IReadOnlyBattleState
         public BattleState State => _state;
 
-        public BattleEngine(int start, int width, int height)
+        public BattleEngine(int start, int width, int height) : this(new BattleState(start, width, height))
         {
-            _state = new BattleState(start, width, height);
         }
 
         public BattleEngine(BattleState initialState)
         {
             _state = initialState;
+            InitReactions();
         }
 
         public void TestInit(BattleState initialState)
         {
             _state = initialState;
+            InitReactions();
+        }
 
+        private void InitReactions()
+        {
+            _reactions.Clear();
             _reactions.Add(new DeathR());
             _reactions.Add(new ThornR());
             _reactions.Add(new HealerUnitR());
@@ -115,16 +121,13 @@ namespace BattleEngine
                 TargetResolver.Resolve(
                     step,
                     _state,
-                    last?.Raw ?? UnitId.Placeholder.Raw));
+                    last ?? UnitId.Placeholder.Raw));
 
             if (executables.Count == 0)
             {
                 if (step is IStepWithTarget swt)
                 {
-                    if (((IdTarget)swt.GetTarget()).Id.To<UnitId>(out var id))
-                    {
-                        _lastTargets[depth - 1] = id;
-                    }
+                    _lastTargets[depth - 1] = ((IdTarget)swt.GetTarget()).Id;
                 }
 
                 executables.AddRange(StepDispatch.Resolve(step, _state));

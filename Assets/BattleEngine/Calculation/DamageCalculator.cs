@@ -15,7 +15,7 @@ namespace BattleEngine.Calculation
             var targetId = ((IdTarget) step.Target).Id;
             
             if (targetId.To<UnitId>(out var unitId)) return CalcUnit(step, state, unitId);
-            if (targetId.To<BattlerId>(out var battlerId)) return CalcBattler(step, state);
+            if (targetId.To<BattlerId>(out var battlerId)) return CalcBattler(step, state, battlerId);
             throw new Exception($"Unknown target id: {targetId}");
         }
 
@@ -38,11 +38,12 @@ namespace BattleEngine.Calculation
             damage += attacker.State.StrengthBonus;
             return damage;
         }
-
-        //#TODO after battler
-        private static int CalcBattler(DamageStep step, BattleState state)
+        
+        private static int CalcBattler(DamageStep step, BattleState state, BattlerId battlerId)
         {
-            return 0;
+            var battler = state.BattlersStateManager.GetBattler(battlerId);
+            if (battler == null || battler.IsDead())  return 0;
+            return Math.Clamp(step.Amount, 0, battler.BattlerData.Shield);
         }
     }
 }
