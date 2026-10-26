@@ -25,7 +25,8 @@ namespace BattleEngine.Id
                 (typeof(T) == typeof(UnitId)    && _idType == IdType.Unit   )   ||
                 (typeof(T) == typeof(BattlerId) && _idType == IdType.Battler)   ||
                 (typeof(T) == typeof(CardId)    && _idType == IdType.Card   )   ||
-                (typeof(T) == typeof(AttackId)  && _idType == IdType.Attack )
+                (typeof(T) == typeof(AttackId)  && _idType == IdType.Attack )   ||
+                (typeof(T) == typeof(GroupId)   && _idType == IdType.Group  )
                 ) {
                 wrapper = new T();
                 wrapper.Raw = this;
@@ -62,5 +63,7 @@ namespace BattleEngine.Id
         {
             return HashCode.Combine(_idType, _id);
         }
+
+        public static implicit operator IdUnion(UnionIdWrapper wrapper) => wrapper.Raw;
     }
 }

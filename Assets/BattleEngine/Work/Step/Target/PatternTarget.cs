@@ -19,9 +19,9 @@ namespace BattleEngine.Work.Step.Target
         
         public TargetResult ResolveTarget(BattleState state, IdUnion lastId)
         {
-            return new TargetResult(state.Board.GetUnitsInPattern(_center, _pattern)
+            return TargetResult.Group(state.Board.GetUnitsInPattern(_center, _pattern)
                 .Select(u => u.UnitId.Raw)
-                .ToList(), true);
+                .ToList());
         }
 
         public ITarget Offset(Position offset)

@@ -37,8 +37,8 @@ namespace BattleEngine.Reaction.UnitReaction
 
                 if (hasHealerNeighbor) healAmount *= Mult;
                 steps.Add(new HealStep(
-                    h.UnitId.Raw,
-                    new IdTarget(h.UnitId.Raw), 
+                    h.UnitId,
+                    new IdTarget(h.UnitId), 
                     healAmount));
             }
             return steps;

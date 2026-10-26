@@ -1,6 +1,6 @@
 using System;
 
-namespace BattleEngine.Cards
+namespace BattleEngine.State
 {
     public struct Position : IEquatable<Position>
     {

@@ -16,9 +16,7 @@ namespace BattleEngine.Work.Step.Target
 
         public TargetResult ResolveTarget(BattleState state, IdUnion lastId)
         {
-            List<IdUnion> ids = new();
-            ids.Add(state.GetUnitAt(_pos)?.UnitId.Raw);
-            return new TargetResult(ids);
+            return TargetResult.One(state.GetUnitAt(_pos)?.UnitId.Raw);
         }
         public override string ToString() => _pos.ToString();
         

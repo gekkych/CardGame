@@ -17,8 +17,8 @@ namespace BattleEngine.Work.Step.Target
         public TargetResult ResolveTarget(BattleState state, IdUnion lastId)
         {
             List<IdUnion> ids = new();
-            if (_id.To<UnitId>(out var unitID)) ids.Add(unitID.Raw);
-            if (_id.To<BattlerId>(out var battlerID)) ids.Add(battlerID.Raw);
+            if (_id.To<UnitId>(out var unitID)) ids.Add(unitID);
+            if (_id.To<BattlerId>(out var battlerID)) ids.Add(battlerID);
             return new TargetResult(ids);
         }
 

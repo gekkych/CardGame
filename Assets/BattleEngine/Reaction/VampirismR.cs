@@ -28,8 +28,8 @@ namespace BattleEngine.Reaction
                 var vampComp = (VampirismComp)from.GetComp(ComponentName.Vampirism);
 
                 steps.Add(new HealStep(
-                    from.UnitId.Raw,
-                    new IdTarget(from.UnitId.Raw),
+                    from.UnitId,
+                    new IdTarget(from.UnitId),
                     vampComp.BaseHeal));
             }
             

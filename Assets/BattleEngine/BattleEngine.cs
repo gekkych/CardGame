@@ -121,7 +121,7 @@ namespace BattleEngine
                 TargetResolver.Resolve(
                     step,
                     _state,
-                    last ?? UnitId.Placeholder.Raw));
+                    last ?? UnitId.Placeholder));
 
             if (executables.Count == 0)
             {

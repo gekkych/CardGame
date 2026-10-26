@@ -26,7 +26,7 @@ namespace BattleEngine.Command.Resolver
                     bound = (BaseStep)swt.WithTarget(pt.Offset(ctx.ToPos));
                 
                 if (bound is IStepWithPerformer swp)
-                    bound = (BaseStep)swp.WithFrom(attacker.UnitId.Raw);
+                    bound = (BaseStep)swp.WithFrom(attacker.UnitId);
 
                 steps.Add(bound);
             }

@@ -8,9 +8,7 @@ namespace BattleEngine.Work.Step.Target
     {
         public TargetResult ResolveTarget(BattleState state, IdUnion lastId)
         {
-            List<IdUnion> ids = new();
-            ids.Add(lastId);
-            return new TargetResult(ids);
+            return TargetResult.One(lastId);
         }
         
         public override string ToString() => "SameAsLast";

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace BattleEngine.Cards
+namespace BattleEngine.State
 {
     public class Pattern
     {

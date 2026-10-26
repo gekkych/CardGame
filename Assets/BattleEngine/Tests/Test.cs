@@ -135,16 +135,16 @@ public void ExplosionTest()
         damageEvents.Take(2).Select(e => e.Target).ToArray(),
         Is.EquivalentTo(new[]
         {
-            slime1.UnitId.Raw,
-            slime2.UnitId.Raw
+            slime1.UnitId,
+            slime2.UnitId
         }));
     
     Assert.That(
         damageEvents.Skip(2).Select(e => e.Target).ToArray(),
         Is.EqualTo(new[]
         {
-            warrior.UnitId.Raw,
-            warrior.UnitId.Raw
+            warrior.UnitId,
+            warrior.UnitId
         }));
 
     Assert.That(warrior.State.CurrHp, Is.EqualTo(warriorHp - 10));

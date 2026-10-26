@@ -14,10 +14,12 @@ namespace BattleEngine.State
     {
         private readonly BattleState _lookUpState;
         private readonly HashSet<BattlerId> _deadBattlers = new();
+        private readonly BattlersLayout _layout;
         
         public BattlersStateManager(BattleState lookUpState)
         {
             _lookUpState = lookUpState;
+            _layout = new BattlersLayout(_lookUpState);
         }
 
         public BaseBattler GetBattler(BattlerId battlerId)
@@ -39,30 +41,11 @@ namespace BattleEngine.State
         
         public BaseBattler GetBattlerOnLine(BoardSide side, int line)
         {
-            int width = _lookUpState.Board.Width;
-            if (line < 0 || line >= width) return null;
+            if (!_layout.TryGetBattlerId(side, line, out var battlerId)) return null;
 
-            var battlers = GetBattlers(side);
-            if (battlers.Count == 0) return null;
+            var battler = GetBattler(battlerId);
 
-            int linesPerBattler = width / battlers.Count;
-            int remainder = width % battlers.Count;
-            int start = 0;
-            
-            for (int i = 0; i < battlers.Count; i++)
-            {
-                int count = linesPerBattler + (i < remainder ? 1 : 0);
-                if (line < start + count)
-                {
-                    var battler = battlers[i];
-                    if (battler == null || battler.IsDead()) return null;
-                    return GetBattler(battler.BattlerData.BattlerId);
-                }
-
-                start += count;
-            }
-
-            return null;
+            return battler != null && !battler.IsDead() ? battler : null;
         }
 
         public BaseBattler GetBattlerAtExit(Position exit)

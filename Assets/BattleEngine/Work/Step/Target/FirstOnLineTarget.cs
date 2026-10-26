@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using BattleEngine.Cards;
 using BattleEngine.Id;
 using BattleEngine.State;
@@ -19,28 +18,29 @@ namespace BattleEngine.Work.Step.Target
         
         public TargetResult ResolveTarget(BattleState state, IdUnion lastId)
         {
-            var target = new List<IdUnion>();
-            if (_dir.Equals(Position.Zero)) return new TargetResult(target);
+            if (_dir.Equals(Position.Zero)) return TargetResult.None;
             
             
             var maybepos = state.Board.GetPosition(_attacker);
-            if (maybepos is not {} pos) return new TargetResult(target);
+            if (maybepos is not {} pos) return TargetResult.None;
             var curr = pos + _dir;
             while (state.Board.InBounds(curr))
             {
                 var unit = state.Board.GetUnitAt(curr);
-                if (unit != null) 
+                if (unit != null)
                 {
-                    target.Add(unit.UnitId.Raw);
-                    return new TargetResult(target);
+                    return TargetResult.One(unit.UnitId);
                 }
                 curr += _dir;
             }
 
             var battler = state.BattlersStateManager.GetBattlerAtExit(curr);
-            if (battler != null) target.Add(battler.BattlerData.BattlerId.Raw);
+            if (battler != null)
+            {
+                return TargetResult.One(battler.BattlerData.BattlerId);
+            }
 
-            return new TargetResult(target);
+            return TargetResult.None;
         }
     }
 }

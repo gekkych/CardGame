@@ -6,6 +6,7 @@ namespace BattleEngine.Enums
         Unit,
         Battler,
         Card,
-        Attack
+        Attack,
+        Group
     }
 }

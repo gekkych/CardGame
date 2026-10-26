@@ -3,6 +3,7 @@ using BattleEngine.Cards;
 using BattleEngine.Enums;
 using BattleEngine.Id.DefId;
 using BattleEngine.Id.RuntimeId;
+using BattleEngine.State;
 using BattleEngine.Unit.Component;
 using BattleEngine.Work.Step.CompStep;
 using BattleEngine.Work.Step.Interfaces;
@@ -18,8 +19,8 @@ namespace BattleEngine.Unit.Attack
             var steps = new List<BaseStep>();
 
             steps.Add(new DamageStep(
-                UnitId.Placeholder.Raw,
-                new PosTarget(new Position(0, 0)),
+                UnitId.Placeholder,
+                new PosTarget(Position.Zero),
                 6,
                 DamageSource.Attack
             ));
@@ -42,8 +43,8 @@ namespace BattleEngine.Unit.Attack
             var steps = new List<BaseStep>();
 
             steps.Add(new DamageStep(
-                UnitId.Placeholder.Raw,
-                new PosTarget(new Position(0, 0)),
+                UnitId.Placeholder,
+                new PosTarget(Position.Zero),
                 5,
                 DamageSource.Attack
             ));
@@ -61,15 +62,15 @@ namespace BattleEngine.Unit.Attack
             var steps = new List<BaseStep>();
 
             steps.Add(new DamageStep(
-                UnitId.Placeholder.Raw,
-                new PosTarget(new Position(0, 0)),
+                UnitId.Placeholder,
+                new PosTarget(Position.Zero),
                 5,
                 DamageSource.Attack
             ));
             
             steps.Add(new DamageStep(
-                UnitId.Placeholder.Raw,
-                new PosTarget(new Position(0, 0)),
+                UnitId.Placeholder,
+                new PosTarget(Position.Zero),
                 5,
                 DamageSource.Attack
             ));
@@ -87,8 +88,8 @@ namespace BattleEngine.Unit.Attack
             var steps = new List<BaseStep>();
             
             steps.Add(new DamageStep(
-                UnitId.Placeholder.Raw,
-                new PatternTarget(new Position(0, 0), Pattern.Patterns.Radius(3)),
+                UnitId.Placeholder,
+                new PatternTarget(Position.Zero, Pattern.Patterns.Radius(3)),
                 5,
                 DamageSource.Explosion));
 

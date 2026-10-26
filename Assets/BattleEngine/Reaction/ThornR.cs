@@ -63,14 +63,14 @@ namespace BattleEngine.Reaction
                         if (comp.RemainingTurns > 1)
                         {
                             steps.Add(new ReplaceCompStep(
-                                new IdTarget(target.UnitId.Raw),
+                                new IdTarget(target.UnitId),
                                 ComponentName.Thorn,
                                 comp with{RemainingTurns = comp.RemainingTurns - 1}));
                         }
                         else
                         {
                             steps.Add(new RemoveCompStep(
-                                new IdTarget(target.UnitId.Raw),
+                                new IdTarget(target.UnitId),
                                 ComponentName.Thorn));
                         }
                     }

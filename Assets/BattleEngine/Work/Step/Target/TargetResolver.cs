@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BattleEngine.Id;
+using BattleEngine.Id.RuntimeId;
 using BattleEngine.State;
 using BattleEngine.Work.Step.Interfaces;
 
@@ -14,13 +15,19 @@ namespace BattleEngine.Work.Step.Target
             if (step is not IStepWithTarget st || st.GetTarget() is IdTarget) return steps;
 
             var targets = st.GetTarget().ResolveTarget(state, lastId);
+            
             int prior = targets.ToGroup ? step.Priority + 1 : step.Priority;
+            GroupId groupId = targets.ToGroup ? state.IdProvider.NextGroupId() : GroupId.Placeholder;
 
             foreach (var target in targets.Ids)
             {
                 if (target != null)
                 {
-                    BaseStep toAdd = (BaseStep)st.WithTarget(new IdTarget(target)) with {Priority = prior};
+                    BaseStep toAdd = (BaseStep)st.WithTarget(new IdTarget(target)) with
+                    {
+                        Priority = prior,
+                        GroupId = groupId
+                    };
                     steps.Add(toAdd);
                 }
             }

@@ -8,7 +8,7 @@ namespace BattleEngine.Id
         private int _nextId;
         
         public int CurrentId => _nextId;
-        public int NextId => ++_nextId;
+        private int NextId => ++_nextId;
 
         public IdProvider(int start)
         {
@@ -23,8 +23,7 @@ namespace BattleEngine.Id
         public BattlerId NextBattlerId() => new(NextId);
         public CardId NextCardId() => new(NextId);
         public AttackId NextAttackId() => new(NextId);
+        public GroupId NextGroupId() => new(NextId);
         
     }
-    
-    
 }
