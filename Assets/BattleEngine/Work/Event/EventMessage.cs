@@ -33,6 +33,9 @@ namespace BattleEngine.Work.Event
                 EndTurnEvent ete =>
                     $"New Turn #{ete.NewTurnNumber}",
                 
+                PlaceUnitEvent pue =>
+                    $"Unit {pue.Unit} placed at {pue.Position}",
+                
                 _ =>
                     "Log Error"
             };

@@ -1,3 +1,4 @@
+using System;
 using BattleEngine.Enums;
 using BattleEngine.Id;
 using BattleEngine.Id.DefId;
@@ -7,6 +8,16 @@ namespace BattleEngine.Unit
 {
     public static class UnitLibrary
     {
+        public static BaseUnit Create(UnitDef unitDef, IdProvider provider)
+        {
+            return unitDef switch
+            {
+                UnitDef.Slime => Slime(provider),
+                UnitDef.Warrior => Warrior(provider),
+                UnitDef.Healer => Healer(provider),
+                _ => throw new NotImplementedException()
+            };
+        }
         
         public static BaseUnit Slime(IdProvider provider)
         {

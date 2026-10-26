@@ -1,5 +1,4 @@
-using BattleEngine.Enums;
-using BattleEngine.Unit;
+using BattleEngine.Id.DefId;
 
 namespace BattleEngine.Cards.Card
 {
@@ -7,12 +6,7 @@ namespace BattleEngine.Cards.Card
     {
         public static BaseUnitCard HealerCard()
         {
-            var card = new BaseUnitCard();
-            card.Cost = 2;
-            
-            
-            return card;
+            return new BaseUnitCard(2, UnitDef.Healer);
         }
-        
     }
 }

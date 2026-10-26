@@ -11,7 +11,7 @@ namespace BattleEngine.State
     public class BattleState
     {
         public IdProvider IdProvider { get; }
-        public BattlersStateManager BattlersStateManager { get; }
+        public BattlersStateManager BattlersStateManager { get; private set; }
         public List<BaseBattler> Players { get; set; }
         public List<BaseBattler> Opponents { get; set; }
         public Board Board { get; set; }
@@ -21,11 +21,24 @@ namespace BattleEngine.State
         public BattleState(int start, int width, int height)
         {
             IdProvider = new IdProvider(start);
-            BattlersStateManager = new BattlersStateManager(this);
             Players = new List<BaseBattler>();
             Opponents = new List<BaseBattler>();
             Board = new Board(width, height);
             Turn = 1;
+        }
+
+        public BattleState(int start, int width, int height, List<BaseBattler> players, List<BaseBattler> opponents)
+        {
+            IdProvider = new IdProvider(start);
+            Players = players;
+            Opponents = opponents;
+            Board = new Board(width, height);
+            Turn = 1;
+        }
+
+        public void LayoutBattlers()
+        {
+            BattlersStateManager = new BattlersStateManager(this);
         }
 
         [CanBeNull]

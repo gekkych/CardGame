@@ -21,6 +21,7 @@ namespace BattleEngine.Work.Step
                 AddCompStep     addCompStep     => new AddCompStepResolver().Resolve(addCompStep, state),
                 RemoveCompStep  removeCompStep  => new RemoveCompStepResolver().Resolve(removeCompStep, state),
                 ReplaceCompStep replaceCompStep => new ReplaceCompStepResolver().Resolve(replaceCompStep, state),
+                PlaceUnitStep   placeUnitStep   => new PlaceUnitStepResolver().Resolve(placeUnitStep, state),
                 _                               => throw new NotImplementedException()
             };
         }

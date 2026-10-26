@@ -1,8 +1,13 @@
 namespace BattleEngine.Battler
 {
-    public abstract class BaseBattler
+    public class BaseBattler
     {
         public BattlerData BattlerData { get; set; }
+
+        public BaseBattler(BattlerData data)
+        {
+            BattlerData = data;
+        }
 
         public bool IsDead()
         {

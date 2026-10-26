@@ -1,7 +1,9 @@
 using System.Linq;
-using BattleEngine.Cards;
+using BattleEngine.Battler;
+using BattleEngine.Cards.Card;
 using BattleEngine.Command;
 using BattleEngine.Enums;
+using BattleEngine.Id.DefId;
 using BattleEngine.State;
 using BattleEngine.Unit;
 using BattleEngine.Unit.Attack;
@@ -54,26 +56,29 @@ namespace BattleEngine.Tests
         [Test]
         public void VampTest()
         {
-            BattleState initialState =  new BattleState(0, 1, 2);
+            BattleState initialState =  new BattleState(0, 20, 20);
             
-            var warrior = UnitLibrary.Warrior(initialState.IdProvider);
             var slime = UnitLibrary.Slime(initialState.IdProvider);
-            initialState.Board.Add(new Position(0, 0), warrior);
-            initialState.Board.Add(new Position(0, 1), slime);
-            warrior.AddComp(new VampirismComp(3));
+            initialState.Board.Add(Position.Pos(2, 2), slime);
+
+            var player = new BaseBattler(new BattlerData(initialState.IdProvider, BattlerType.Player, 100));
+            initialState.Players.Add(player);
+            initialState.LayoutBattlers();
             
             BattleEngine engine = new BattleEngine(initialState);
             engine.TestInit(initialState);
+
+            var card = new BaseUnitCard(2, UnitDef.Warrior);
+            
+            Turn(engine, new PlayCardContext(
+                player.BattlerData.BattlerId, 
+                card, 
+                Position.Pos(1, 1)));
             
             Turn(engine, new AttackContext(
-                new Position(0,1), 
-                new Position(0,0), 
-                AttackLibrary.DoubleSlash()));
-            
-            Turn(engine, new AttackContext(
-                    new Position(0,0), 
-                    new Position(0,1), 
-                    AttackLibrary.Slash()));
+                new Position(1,1), 
+                new Position(2,2), 
+                AttackLibrary.Slash()));
         }
 
         [Test]
@@ -135,16 +140,16 @@ public void ExplosionTest()
         damageEvents.Take(2).Select(e => e.Target).ToArray(),
         Is.EquivalentTo(new[]
         {
-            slime1.UnitId,
-            slime2.UnitId
+            slime1.UnitId.Raw,
+            slime2.UnitId.Raw
         }));
     
     Assert.That(
         damageEvents.Skip(2).Select(e => e.Target).ToArray(),
         Is.EqualTo(new[]
         {
-            warrior.UnitId,
-            warrior.UnitId
+            warrior.UnitId.Raw,
+            warrior.UnitId.Raw
         }));
 
     Assert.That(warrior.State.CurrHp, Is.EqualTo(warriorHp - 10));

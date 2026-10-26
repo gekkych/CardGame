@@ -2,7 +2,7 @@ namespace BattleEngine.Battler
 {
     public enum BattlerType
     {
-        PLAYER,
-        ENEMY1
+        Player,
+        Enemy1
     }
 }

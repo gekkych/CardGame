@@ -68,6 +68,10 @@ namespace BattleEngine.Work.Event.Applier
                     state.Turn++;
                     break;
                 
+                case PlaceUnitEvent placeUnitEvent:
+                    state.Board.Add(placeUnitEvent.Position, placeUnitEvent.Unit);
+                    break;
+                
                 default:
                     throw new System.NotImplementedException();
             }

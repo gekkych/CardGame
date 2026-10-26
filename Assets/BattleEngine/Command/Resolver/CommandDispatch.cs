@@ -12,6 +12,7 @@ namespace BattleEngine.Command.Resolver
             {
                 SkipTurnContext => new List<BaseStep>(),
                 AttackContext attackContext => new AttackCommandResolver().Resolve(state, attackContext),
+                PlayCardContext playCardContext => new PlayCardCommandResolver().Resolve(state, playCardContext),
                 _ => new List<BaseStep>()
             };
         }
